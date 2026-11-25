@@ -1,0 +1,60 @@
+:root {
+  --hijau-masjid: #0f5e4b;
+  --biru-tinta: #24408e;
+  --merah-garis: #b3372e;
+  --hijau-kertas: #cfe0d8;
+  --latar: #eef2f0;
+  --tinta: #1c2630;
+  --lembar: #ffffff;
+
+  --teks: 15px;
+  --judul: 30px;
+  --kecil: 13px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--latar);
+  color: var(--tinta);
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-size: var(--teks);
+  line-height: 1.6;
+}
+
+.lembar {
+  max-width: 72ch;
+  margin: 48px auto;
+  padding: 32px;
+  background: var(--lembar);
+  border-top: 4px solid var(--hijau-masjid);
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: var(--judul);
+  color: var(--hijau-masjid);
+}
+
+.keterangan {
+  font-size: var(--kecil);
+}
+
+:focus-visible {
+  outline: 3px solid var(--biru-tinta);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
