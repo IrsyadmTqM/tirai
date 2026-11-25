@@ -2,6 +2,7 @@
 
 import { Router } from 'express';
 import { ASNAF } from '../../bersama/label.js';
+import { catat, catatUntukBanyak } from '../audit.js';
 import { dalamTransaksi } from '../db/index.js';
 import {
   bacaPengguna,
@@ -23,11 +24,21 @@ const PERAN_STAF = ['admin', 'bendahara', 'amil'];
 export function ruteOrang({ db, brankas }) {
   const r = Router();
 
+  const catatBacaMustahik = (pengguna, daftar) =>
+    catatUntukBanyak(db, {
+      pengguna,
+      aksi: 'baca',
+      objek: 'mustahik',
+      subjekJenis: 'mustahik',
+      subjekIds: daftar.map((m) => m.id),
+    });
+
   r.get('/mustahik', wajib('mustahik:baca_wilayah', 'mustahik:baca_terbatas'), (req, res) => {
     const p = req.pengguna;
     if (boleh(p.peran, 'mustahik:baca_wilayah')) {
       // Amil: data lengkap, hanya wilayahnya.
       const mustahik = daftarMustahik(db, brankas, { wilayahId: p.wilayah_id, buka: ['nama', 'alamat', 'kondisi'] });
+      catatBacaMustahik(p, mustahik);
       return res.json({ mustahik });
     }
     // Bendahara: hanya nama yang didekripsi; alamat dan kondisi tidak.
@@ -37,6 +48,7 @@ export function ruteOrang({ db, brankas }) {
       asnaf,
       wilayah,
     }));
+    catatBacaMustahik(p, mustahik);
     res.json({ mustahik });
   });
 
@@ -59,10 +71,12 @@ export function ruteOrang({ db, brankas }) {
       return res.status(409).json({ error: 'NIK ini sudah terdaftar sebagai penerima' });
     }
     const id = dalamTransaksi(db, () => tambahMustahik(db, brankas, data));
+    catat(db, { pengguna: req.pengguna, aksi: 'buat', objek: 'mustahik', subjek: { jenis: 'mustahik', id } });
     res.status(201).json({ id });
   });
 
   r.get('/pengguna', wajib('pengguna:kelola'), (req, res) => {
+    catat(db, { pengguna: req.pengguna, aksi: 'baca', objek: 'pengguna' });
     res.json({ pengguna: daftarPengguna(db) });
   });
 
@@ -86,6 +100,7 @@ export function ruteOrang({ db, brankas }) {
       if (!bacaWilayah(db, wilayahId)) throw new v.GalatPermintaan('Wilayah tidak ditemukan');
     }
     ubahPeran(db, id, { peran, wilayahId });
+    catat(db, { pengguna: req.pengguna, aksi: 'ubah', objek: 'pengguna', subjek: { jenis: 'pengguna', id } });
     res.json({ pengguna: bacaPengguna(db, id) });
   });
 

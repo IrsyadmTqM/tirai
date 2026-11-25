@@ -118,6 +118,27 @@ export const INVENTARIS = {
     },
   },
 
+  audit_log: {
+    id: { alasan: 'Penanda baris dan urutan catatan', perlindungan: 'Hanya bisa ditambah' },
+    waktu: { alasan: 'Kapan akses terjadi', perlindungan: 'Hanya bisa ditambah' },
+    pengguna_id: {
+      alasan: 'Siapa yang mengakses (akun staf atau pemilik data)',
+      perlindungan: 'Hanya admin yang melihat; pemilik data hanya melihat perannya',
+    },
+    peran: { alasan: 'Peran pelaku saat akses, untuk riwayat akses pemilik data', perlindungan: 'Hanya bisa ditambah' },
+    aksi: { alasan: 'Jenis aksi: baca, buat, ubah, ekspor, hapus, masuk', perlindungan: 'Pilihan tetap, bukan teks bebas' },
+    objek: { alasan: 'Jenis data yang diakses', perlindungan: 'Pilihan tetap, bukan teks bebas' },
+    subjek_jenis: { alasan: 'Data siapa yang diakses: donatur, mustahik, atau akun', perlindungan: 'Pilihan tetap' },
+    subjek_id: {
+      alasan: 'Nomor orang yang datanya diakses, tanpa nama',
+      perlindungan: 'Nomor saja, bukan data pribadi asli',
+    },
+    saluran: {
+      alasan: 'Membedakan akses dari aplikasi dan dari peragaan beranda',
+      perlindungan: 'Pilihan tetap',
+    },
+  },
+
   donasi: {
     id: { alasan: 'Penanda baris', perlindungan: '-' },
     donatur_id: {

@@ -68,6 +68,20 @@ enkripsi kolom mulai langkah 3.
 | `pengguna_id` | Pemilik sesi | Tidak dikirim ke browser |
 | `kedaluwarsa_pada` | Sesi berakhir otomatis setelah 8 jam | - |
 
+## audit_log
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `id` | Penanda baris dan urutan catatan | Hanya bisa ditambah |
+| `waktu` | Kapan akses terjadi | Hanya bisa ditambah |
+| `pengguna_id` | Siapa yang mengakses (akun staf atau pemilik data) | Hanya admin yang melihat; pemilik data hanya melihat perannya |
+| `peran` | Peran pelaku saat akses, untuk riwayat akses pemilik data | Hanya bisa ditambah |
+| `aksi` | Jenis aksi: baca, buat, ubah, ekspor, hapus, masuk | Pilihan tetap, bukan teks bebas |
+| `objek` | Jenis data yang diakses | Pilihan tetap, bukan teks bebas |
+| `subjek_jenis` | Data siapa yang diakses: donatur, mustahik, atau akun | Pilihan tetap |
+| `subjek_id` | Nomor orang yang datanya diakses, tanpa nama | Nomor saja, bukan data pribadi asli |
+| `saluran` | Membedakan akses dari aplikasi dan dari peragaan beranda | Pilihan tetap |
+
 ## donasi
 
 | Kolom | Alasan | Perlindungan |

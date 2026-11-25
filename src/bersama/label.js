@@ -26,6 +26,31 @@ export const LABEL_ASNAF = {
   ibnu_sabil: 'Ibnu sabil',
 };
 
+export const LABEL_AKSI = {
+  baca: 'membaca',
+  buat: 'membuat',
+  ubah: 'mengubah',
+  ekspor: 'mengekspor',
+  hapus: 'menghapus',
+  masuk: 'masuk',
+  gagal_masuk: 'gagal masuk',
+  keluar: 'keluar',
+};
+
+export const LABEL_OBJEK = {
+  buku_kas: 'buku kas',
+  mustahik: 'data mustahik',
+  donatur: 'data donatur',
+  donasi: 'catatan donasi',
+  penyaluran: 'catatan penyaluran',
+  pengguna: 'akun',
+  audit_log: 'audit log',
+  sesi: 'sesi',
+  persetujuan: 'persetujuan',
+  permintaan: 'permintaan',
+  catatan: 'catatan pribadi',
+};
+
 export const NAMA_PERAN = {
   admin: 'Admin',
   bendahara: 'Bendahara',

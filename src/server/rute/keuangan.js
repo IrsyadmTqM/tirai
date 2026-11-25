@@ -2,10 +2,11 @@
 
 import { Router } from 'express';
 import { JENIS_DONASI, JENIS_PENYALURAN } from '../../bersama/label.js';
+import { catat, catatUntukBanyak } from '../audit.js';
 import { daftarDonasi, hitungRingkasan, saldoJenis, tambahDonasi, tambahPenyaluran } from '../data/keuangan.js';
 import { adaDonatur, adaMustahik, daftarDonatur } from '../data/orang.js';
 import { wajib } from '../keamanan/middleware.js';
-import { susunBukuKas } from '../layanan/buku-kas.js';
+import { catatAksesBukuKas, susunBukuKas } from '../layanan/buku-kas.js';
 import * as v from '../validasi.js';
 
 const NOMINAL_MAKS = 10_000_000_000;
@@ -14,7 +15,8 @@ export function ruteKeuangan({ db, brankas }) {
   const r = Router();
 
   r.get('/buku-kas', wajib('buku_kas:baca', 'buku_kas:ringkas', 'buku_kas:wilayah'), (req, res) => {
-    const { tampilan } = susunBukuKas(db, brankas, req.pengguna);
+    const { tampilan, terbuka } = susunBukuKas(db, brankas, req.pengguna);
+    catatAksesBukuKas(db, req.pengguna, terbuka);
     res.json(tampilan);
   });
 
@@ -23,11 +25,27 @@ export function ruteKeuangan({ db, brankas }) {
   });
 
   r.get('/donatur', wajib('donatur:baca_nama'), (req, res) => {
-    res.json({ donatur: daftarDonatur(db) });
+    const donatur = daftarDonatur(db);
+    catatUntukBanyak(db, {
+      pengguna: req.pengguna,
+      aksi: 'baca',
+      objek: 'donatur',
+      subjekJenis: 'donatur',
+      subjekIds: donatur.map((d) => d.id),
+    });
+    res.json({ donatur });
   });
 
   r.get('/donasi', wajib('donasi:baca'), (req, res) => {
-    const donasi = daftarDonasi(db).map((d) => ({
+    const semua = daftarDonasi(db);
+    catatUntukBanyak(db, {
+      pengguna: req.pengguna,
+      aksi: 'baca',
+      objek: 'donatur',
+      subjekJenis: 'donatur',
+      subjekIds: [...new Set(semua.filter((d) => d.donatur_id).map((d) => d.donatur_id))],
+    });
+    const donasi = semua.map((d) => ({
       id: d.id,
       tanggal: d.tanggal,
       jenis: d.jenis,
@@ -48,6 +66,12 @@ export function ruteKeuangan({ db, brankas }) {
       tanggal: v.tanggal(b.tanggal, 'Tanggal'),
       dicatatOleh: req.pengguna.id,
     });
+    catat(db, {
+      pengguna: req.pengguna,
+      aksi: 'buat',
+      objek: 'donasi',
+      subjek: donaturId ? { jenis: 'donatur', id: donaturId } : null,
+    });
     res.status(201).json({ id });
   });
 
@@ -67,6 +91,7 @@ export function ruteKeuangan({ db, brankas }) {
       tanggal: v.tanggal(b.tanggal, 'Tanggal'),
       dicatatOleh: req.pengguna.id,
     });
+    catat(db, { pengguna: req.pengguna, aksi: 'buat', objek: 'penyaluran', subjek: { jenis: 'mustahik', id: mustahikId } });
     res.status(201).json({ id });
   });
 

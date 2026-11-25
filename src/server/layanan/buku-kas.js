@@ -1,8 +1,24 @@
 // Menyusun buku kas penyaluran sesuai peran pengguna.
 
+import { catat, catatUntukBanyak } from '../audit.js';
 import { bacaBukuKasLengkap, hitungRingkasan } from '../data/keuangan.js';
 import { KOLOM_TERENKRIPSI_MUSTAHIK, bacaWilayah } from '../data/orang.js';
 import { KOLOM_BUKU_KAS, boleh, saringBukuKas } from '../keamanan/kebijakan.js';
+
+// Satu catatan "baca buku_kas", ditambah satu catatan "baca mustahik" untuk
+// tiap mustahik yang identitasnya ikut terlihat oleh peran itu.
+export function catatAksesBukuKas(db, pengguna, terbuka, saluran = 'aplikasi') {
+  const umum = catat(db, { pengguna, aksi: 'baca', objek: 'buku_kas', saluran });
+  const perOrang = catatUntukBanyak(db, {
+    pengguna,
+    aksi: 'baca',
+    objek: 'mustahik',
+    subjekJenis: 'mustahik',
+    subjekIds: terbuka,
+    saluran,
+  });
+  return [umum, ...perOrang];
+}
 
 // "terbuka" (id mustahik yang identitasnya terlihat) dikembalikan terpisah
 // untuk audit log dan tidak boleh ikut dikirim ke browser.

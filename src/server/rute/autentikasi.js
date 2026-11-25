@@ -2,6 +2,7 @@
 
 import { Router } from 'express';
 import { randomBytes } from 'node:crypto';
+import { catat } from '../audit.js';
 import { cariAkun, bacaWilayah } from '../data/orang.js';
 import { cocokkanSandi, hashSandi } from '../keamanan/sandi.js';
 import { buatSesi, hapusCookieSesi, hapusSesi, pasangCookieSesi } from '../keamanan/sesi.js';
@@ -62,17 +63,21 @@ export function ruteAutentikasi({ db, opsi }) {
 
     if (!akun || !cocok) {
       catatGagal(nama);
+      // Nama yang dicoba dan kata sandinya tidak dicatat.
+      catat(db, { pengguna: akun, aksi: 'gagal_masuk', objek: 'sesi' });
       return res.status(401).json({ error: 'Nama pengguna atau kata sandi salah' });
     }
 
     gagal.delete(nama);
     const token = buatSesi(db, akun.id);
+    catat(db, { pengguna: akun, aksi: 'masuk', objek: 'sesi' });
     pasangCookieSesi(res, token, { aman: opsi.cookieAman });
     const lengkap = db.prepare('SELECT id, nama_pengguna, peran, wilayah_id FROM pengguna WHERE id = ?').get(akun.id);
     res.json({ pengguna: profil(db, lengkap) });
   });
 
   r.post('/keluar', (req, res) => {
+    if (req.pengguna) catat(db, { pengguna: req.pengguna, aksi: 'keluar', objek: 'sesi' });
     hapusSesi(db, req.tokenSesi);
     hapusCookieSesi(res, { aman: opsi.cookieAman });
     res.status(204).end();

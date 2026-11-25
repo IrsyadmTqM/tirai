@@ -274,6 +274,44 @@ textarea {
   border-radius: 1px;
 }
 
+/* Audit log */
+
+.daftar-audit {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.daftar-audit li {
+  display: grid;
+  grid-template-columns: 19ch 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--hijau-kertas);
+}
+
+.audit-waktu {
+  font-size: var(--kecil);
+  color: var(--tinta-lembut);
+  font-variant-numeric: tabular-nums;
+}
+
+.label-peragaan {
+  margin-left: 8px;
+  font-size: var(--kecil);
+  color: var(--biru-tinta);
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 4px;
+}
+
+@media (max-width: 560px) {
+  .daftar-audit li {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
