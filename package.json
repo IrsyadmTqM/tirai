@@ -20,6 +20,7 @@
     "@fontsource/atkinson-hyperlegible": "^5.3.0",
     "@vitejs/plugin-react": "^6.3.0",
     "concurrently": "^10.0.7",
+    "motion": "^14.14.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "supertest": "^7.3.2",

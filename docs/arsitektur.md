@@ -123,3 +123,18 @@ Tabel `audit_log` mencatat siapa (akun dan peran), kapan, aksi (baca, buat, ubah
 - Tidak memakai foreign key, sehingga catatan tetap ada setelah data orangnya dihapus. Nomor donatur, mustahik, dan akun memakai `AUTOINCREMENT`, jadi nomor lama tidak pernah berpindah ke orang lain.
 
 Batasan: pemilik berkas database (misalnya admin server) tetap bisa menghapus berkasnya atau mematikan trigger dengan akses langsung ke SQLite. Trigger mencegah perubahan lewat aplikasi dan kelalaian, bukan penyerang yang menguasai server. Untuk itu diperlukan penyimpanan log terpisah atau rantai hash, dan ini di luar cakupan prototipe.
+
+## Tampilan beranda (langkah 5)
+
+- Buku kas peragaan: pengunjung memilih peran (Admin, Bendahara, Amil lapangan RW 01). Setiap pergantian memanggil `GET /api/peragaan/buku-kas`, jadi yang tergambar adalah jawaban server untuk peran itu. Sel yang ditutup tidak punya nilai di browser.
+- Gerak yang dipakai, masing-masing dengan makna:
+  - Tirai menutup sel dari kiri saat peran diganti dan tersibak ke kanan saat peran boleh melihat. Lebar bar dipertahankan supaya tabel tidak melompat.
+  - Angka ringkasan berputar seperti penghitung mekanis saat nilainya muncul atau berubah.
+  - Catatan audit log yang baru dibuat server meluncur masuk di panel "Catatan akses".
+  - Bagian "Cara Tirai menjaga data": garis alur terisi mengikuti scroll, dan tiap tahap (minimisasi, enkripsi, RBAC, audit log) bergerak saat masuk layar.
+- `prefers-reduced-motion`: `MotionGlobalConfig.skipAnimations` membuat semua animasi Motion langsung selesai, animasi teks acak langsung menampilkan hasil akhir, garis alur tampil penuh, dan transisi CSS dimatikan. Diperiksa otomatis dengan Playwright (tidak ada transform yang masih berjalan setelah peran diganti).
+- Aksesibilitas: fokus keyboard terlihat (garis biru tinta 3px), tombol peran memakai `aria-pressed`, sel tertutup punya teks "ditutup untuk peran ini" untuk pembaca layar, semua target sentuh minimal 44px (diperiksa otomatis), tabel bisa digeser di layar sempit.
+- Kontras warna teks terhadap putih, dihitung dengan rumus WCAG: tinta `#1C2630` sekitar 15:1, tinta lembut `#46525E` sekitar 8:1, hijau masjid `#0F5E4B` sekitar 7,7:1, biru tinta `#24408E` sekitar 9,5:1, merah garis `#B3372E` sekitar 6:1. Semuanya di atas 4,5:1.
+- Content-Security-Policy `default-src 'self'` tetap berlaku: tidak ada skrip atau gaya dari luar, dan konsol browser bersih saat diuji.
+
+Bukti: tangkapan layar dan video di `docs/bukti-uji/langkah-5-*`.

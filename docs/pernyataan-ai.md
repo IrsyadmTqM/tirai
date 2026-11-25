@@ -12,5 +12,6 @@ Alat: Claude Code (Anthropic).
 | 2026-11-25 | Langkah 2 | Sesi cookie, batas percobaan masuk, kebijakan RBAC, endpoint API, header keamanan, halaman masuk dan dasbor sederhana, tes matriks peran x endpoint, dokumentasi API | (diisi tim setelah memeriksa) |
 | 2026-11-25 | Langkah 3 | Enkripsi kolom AES-256-GCM, kunci data per pemilik terbungkus kunci master, HMAC NIK, pendaftaran mustahik oleh amil, tes ciphertext di disk, dokumentasi batasan | (diisi tim setelah memeriksa) |
 | 2026-11-25 | Langkah 4 | Tabel audit log append-only dengan trigger, pencatatan per aksi dan per orang, endpoint baca untuk admin, tampilan audit log, tes | (diisi tim setelah memeriksa) |
+| 2026-11-25 | Langkah 5 | Beranda: buku kas peragaan dengan animasi tirai, angka berputar, log meluncur, bagian Cara Tirai menjaga data, gaya tampilan, pemeriksaan reduced-motion dan aksesibilitas dengan Playwright | (diisi tim setelah memeriksa) |
 
 Catatan: AI tidak dipakai sebagai sumber teks ayat, hadis, atau pasal undang-undang. Semua rujukan semacam itu diperiksa manusia ke sumber asli.
