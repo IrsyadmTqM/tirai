@@ -17,7 +17,7 @@ export const HAK_PERAN = {
     'penyaluran:catat',
     'mustahik:baca_terbatas',
   ],
-  amil: ['buku_kas:wilayah', 'mustahik:baca_wilayah'],
+  amil: ['buku_kas:wilayah', 'mustahik:baca_wilayah', 'mustahik:catat_wilayah'],
   pemilik: [],
 };
 
@@ -65,14 +65,18 @@ function kolomTerlihat(pengguna, baris) {
 //
 // Hasil kedua, "terbuka", berisi id mustahik yang identitasnya ikut
 // terlihat. Dipakai untuk audit log, tidak dikirim ke browser.
-export function saringBukuKas(pengguna, semuaBaris) {
+//
+// bukaNilai(baris, kolom) dipanggil hanya untuk sel yang boleh dilihat.
+// Untuk kolom terenkripsi, fungsi ini yang mendekripsi; jadi data yang
+// tidak boleh dilihat suatu peran bahkan tidak pernah didekripsi.
+export function saringBukuKas(pengguna, semuaBaris, bukaNilai = (b, k) => b[k]) {
   const terbuka = new Set();
   const baris = semuaBaris.map((b) => {
     const terlihat = new Set(kolomTerlihat(pengguna, b));
     const hasil = { id: b.id, tertutup: [] };
     for (const kolom of KOLOM_BUKU_KAS) {
       if (terlihat.has(kolom)) {
-        hasil[kolom] = b[kolom];
+        hasil[kolom] = bukaNilai(b, kolom);
       } else {
         hasil[kolom] = null;
         hasil.tertutup.push(kolom);

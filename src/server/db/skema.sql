@@ -2,8 +2,9 @@
 -- Setiap kolom wajib punya alasan tertulis di inventaris.js. Tes otomatis
 -- menolak kolom yang tidak punya alasan (prinsip minimisasi data).
 --
--- Langkah 1: kolom sensitif masih teks biasa. Mulai langkah 3, kolom yang
--- ditandai [ENKRIPSI] disimpan sebagai ciphertext AES-256-GCM.
+-- Kolom yang ditandai [ENKRIPSI] disimpan sebagai ciphertext AES-256-GCM
+-- berawalan "v1:". CHECK di bawah menolak teks biasa masuk ke kolom itu,
+-- sehingga kelalaian kode tidak bisa diam-diam menyimpan data asli.
 -- Semua data yang diisi ke tabel ini sintetis.
 --
 -- Tabel donatur, mustahik, dan pengguna memakai AUTOINCREMENT supaya nomor
@@ -15,23 +16,33 @@ CREATE TABLE wilayah (
   nama  TEXT NOT NULL UNIQUE
 ) STRICT;
 
+-- Kunci data per pemilik data, terbungkus kunci master (envelope
+-- encryption). Kunci master sendiri tidak pernah disimpan di database.
+CREATE TABLE kunci_data (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  kunci_terbungkus  TEXT NOT NULL CHECK (kunci_terbungkus LIKE 'v1:%'),
+  dibuat_pada       TEXT NOT NULL
+) STRICT;
+
 CREATE TABLE donatur (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   nama         TEXT NOT NULL,
-  kontak       TEXT,                 -- opsional [ENKRIPSI]
+  kontak       TEXT CHECK (kontak IS NULL OR kontak LIKE 'v1:%'),  -- opsional [ENKRIPSI]
+  kunci_id     INTEGER NOT NULL UNIQUE REFERENCES kunci_data(id),
   dibuat_pada  TEXT NOT NULL
 ) STRICT;
 
 CREATE TABLE mustahik (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
-  nama         TEXT NOT NULL,        -- [ENKRIPSI]
-  alamat       TEXT NOT NULL,        -- [ENKRIPSI]
-  kondisi      TEXT,                 -- catatan singkat [ENKRIPSI]
+  nama         TEXT NOT NULL CHECK (nama LIKE 'v1:%'),                 -- [ENKRIPSI]
+  alamat       TEXT NOT NULL CHECK (alamat LIKE 'v1:%'),               -- [ENKRIPSI]
+  kondisi      TEXT CHECK (kondisi IS NULL OR kondisi LIKE 'v1:%'),    -- catatan singkat [ENKRIPSI]
   asnaf        TEXT NOT NULL CHECK (asnaf IN (
                  'fakir', 'miskin', 'amil', 'mualaf',
                  'riqab', 'gharim', 'fisabilillah', 'ibnu_sabil')),
   wilayah_id   INTEGER NOT NULL REFERENCES wilayah(id),
-  nik_hmac     TEXT UNIQUE,          -- penanda duplikat, diisi mulai langkah 3
+  nik_hmac     TEXT UNIQUE CHECK (nik_hmac IS NULL OR length(nik_hmac) = 64),  -- HMAC-SHA256, bukan NIK
+  kunci_id     INTEGER UNIQUE REFERENCES kunci_data(id),
   dibuat_pada  TEXT NOT NULL
 ) STRICT;
 

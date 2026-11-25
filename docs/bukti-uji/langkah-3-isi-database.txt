@@ -1,0 +1,114 @@
+.env not found. Continuing without it.
+Isi mentah /home/user/tirai/data/tirai.db
+
+== wilayah (3 baris)
+┌─────────┬────┬─────────┐
+│ (index) │ id │ nama    │
+├─────────┼────┼─────────┤
+│ 0       │ 1  │ 'RW 01' │
+│ 1       │ 2  │ 'RW 02' │
+│ 2       │ 3  │ 'RW 03' │
+└─────────┴────┴─────────┘
+== kunci_data (17 baris)
+┌─────────┬────┬─────────────────────────────────────────────────────┬────────────────────────────┐
+│ (index) │ id │ kunci_terbungkus                                    │ dibuat_pada                │
+├─────────┼────┼─────────────────────────────────────────────────────┼────────────────────────────┤
+│ 0       │ 1  │ 'v1:x4jr9gkK/DPHf4ur4bu/G8aHc0IhMkorAQ69QK0gzcNYY…' │ '2026-11-25T18:58:17.644Z' │
+│ 1       │ 2  │ 'v1:usEBNIWj/txN8RsxE0gMFMiOndHXiCHeZiRVG0VSIBM50…' │ '2026-11-25T18:58:17.644Z' │
+│ 2       │ 3  │ 'v1:Hs9t+nsHv/u42gkPApAhmTpfsTZ7zXFbHPpTNW7z01OLF…' │ '2026-11-25T18:58:17.645Z' │
+│ 3       │ 4  │ 'v1:WdqKQZvp/x5rXp9PEEbJkkCvfQzg9M4rKtnr/NhiS2xNR…' │ '2026-11-25T18:58:17.645Z' │
+│ 4       │ 5  │ 'v1:vGMrDNNK/+pMj17Iqkzx41ZeUONGuB6V7M5gSqvk6EEBx…' │ '2026-11-25T18:58:17.645Z' │
+│ 5       │ 6  │ 'v1:NBmI/9rY7mx929m1bxx2/XhqBq3+Yz15Cp+y2/NS1QIJm…' │ '2026-11-25T18:58:17.645Z' │
+│ 6       │ 7  │ 'v1:bnT3FgCRCBZmU+QuR7TG99dTMTNX/mMp1a3Ypjd+x27ug…' │ '2026-11-25T18:58:17.645Z' │
+│ 7       │ 8  │ 'v1:Ol0JvFx6JpWuHECXAdgBQ4h610qp2UCnJuiehf5FRKqs7…' │ '2026-11-25T18:58:17.645Z' │
+│ 8       │ 9  │ 'v1:fBgtmpceG7T2uiYBkhrSxKAz51rbizmVorYvJI9fHkTRb…' │ '2026-11-25T18:58:17.645Z' │
+│ 9       │ 10 │ 'v1:ZJxby7RH9BzpjRDxC39GdWrPZmyou4jPizTYVim762/Jp…' │ '2026-11-25T18:58:17.646Z' │
+│ 10      │ 11 │ 'v1:ueDXjm5rHVr2Jh0iD4P4QypjVfWtVTmOD2KL0zz35k97f…' │ '2026-11-25T18:58:17.646Z' │
+│ 11      │ 12 │ 'v1:UmFrkkizgS9hcHsQicpsM+IUPgg2EqBnsO13SiG4Mw1RL…' │ '2026-11-25T18:58:17.646Z' │
+│ 12      │ 13 │ 'v1:AEEln458vo0WZJlk1laWxxK/HDBG+36o5fFeHNxfwswK5…' │ '2026-11-25T18:58:17.646Z' │
+│ 13      │ 14 │ 'v1:j5/SAt3I49W3jQiAQSkiGyRzYLgCpjj+LHB9QdroYW38a…' │ '2026-11-25T18:58:17.646Z' │
+│ 14      │ 15 │ 'v1:LZxT1PSu5pCpg1S/gLeom6P6aHy/WBdLRJSti8Z85rwSY…' │ '2026-11-25T18:58:17.646Z' │
+│ 15      │ 16 │ 'v1:kQlED8OYkbN55zjiibrkJqICP2yW9yW77hyGvdneLZtPT…' │ '2026-11-25T18:58:17.647Z' │
+│ 16      │ 17 │ 'v1:cv5LJC0nGGcaqPPN4tXKzVTAzw+hWqEg7fiGUUY6yHz8Q…' │ '2026-11-25T18:58:17.647Z' │
+└─────────┴────┴─────────────────────────────────────────────────────┴────────────────────────────┘
+== donatur (8 baris)
+┌─────────┬────┬──────────────────┬─────────────────────────────────────────────────────┬──────────┬────────────────────────────┐
+│ (index) │ id │ nama             │ kontak                                              │ kunci_id │ dibuat_pada                │
+├─────────┼────┼──────────────────┼─────────────────────────────────────────────────────┼──────────┼────────────────────────────┤
+│ 0       │ 1  │ 'Ahmad Fauzi'    │ 'v1:UiOz5s7ytec1M6s36zN+bWHdyUs5Yap1Lf1QMFJ2DvyYV…' │ 1        │ '2026-03-01T02:00:00.000Z' │
+│ 1       │ 2  │ 'Siti Rahmawati' │ 'v1:Sa0QweCYnVfF1zSaY5jQRx3LGf0sL/FUH10nNGn5mmPh6…' │ 2        │ '2026-03-01T02:00:00.000Z' │
+│ 2       │ 3  │ 'Budi Santoso'   │ null                                                │ 3        │ '2026-03-01T02:00:00.000Z' │
+│ 3       │ 4  │ 'Nur Aini'       │ 'v1:NsIaMri6vS0AxkuCgziortCTuKdmgXAutMAZ81orxmwTa…' │ 4        │ '2026-03-01T02:00:00.000Z' │
+│ 4       │ 5  │ 'Hendra Wijaya'  │ null                                                │ 5        │ '2026-03-01T02:00:00.000Z' │
+│ 5       │ 6  │ 'Rina Marlina'   │ 'v1:O5/BSSvumADmUBBgoFd3VWFqLHzZFjdWM+a7licKl4g2C…' │ 6        │ '2026-03-01T02:00:00.000Z' │
+│ 6       │ 7  │ 'Dedi Kurniawan' │ 'v1:zEJcEgrIV+pksfh3qxqi1T10/1rlRlFrqlYUSminrs/EX…' │ 7        │ '2026-03-01T02:00:00.000Z' │
+│ 7       │ 8  │ 'Laila Hasanah'  │ null                                                │ 8        │ '2026-03-01T02:00:00.000Z' │
+└─────────┴────┴──────────────────┴─────────────────────────────────────────────────────┴──────────┴────────────────────────────┘
+== mustahik (9 baris)
+┌─────────┬────┬─────────────────────────────────────────────────────┬─────────────────────────────────────────────────────┬─────────────────────────────────────────────────────┬──────────┬────────────┬─────────────────────────────────────────────────────┬──────────┬────────────────────────────┐
+│ (index) │ id │ nama                                                │ alamat                                              │ kondisi                                             │ asnaf    │ wilayah_id │ nik_hmac                                            │ kunci_id │ dibuat_pada                │
+├─────────┼────┼─────────────────────────────────────────────────────┼─────────────────────────────────────────────────────┼─────────────────────────────────────────────────────┼──────────┼────────────┼─────────────────────────────────────────────────────┼──────────┼────────────────────────────┤
+│ 0       │ 1  │ 'v1:6ERQqkIIPqu2zY79FzkDd4dVtVZNHQtqly2N0a1lWUOdg…' │ 'v1:jQHq1awJAFIP1m5QTAJqTDWPIVt7lpVr4nvu+9y2tilwA…' │ 'v1:21TuDdDL52OFoZcdnVhkoENBOBXnjPGl/HPAGUmt8Ud3J…' │ 'fakir'  │ 1          │ 'e5f8cc65fa665789304cfd24e32f4cb1ff3433aa311d938b…' │ 9        │ '2026-03-01T02:00:00.000Z' │
+│ 1       │ 2  │ 'v1:COCnnqn+FZ+AsW1s/ZyV+1ySQtoAJWP6u1YKXZ01x5tIi…' │ 'v1:X/ln2yXuj1TIDw8DLuSsIgj+gOa4UVYtCUGSfOgMpsWqC…' │ 'v1:69Y+KrR2qsx2q3To4ufUynNUkzxdlKPAlmaYWP/xYC64k…' │ 'miskin' │ 1          │ '7a23f9c5ccc1ca0ca22ccb5f68412c27a936a79aa4189a85…' │ 10       │ '2026-03-01T02:00:00.000Z' │
+│ 2       │ 3  │ 'v1:CSfF6KaiDbTg5aT66a5NZAFI/eanD0Vj6sKOez2OMru7k…' │ 'v1:LBDT6zNK+9bqhrNCPA0ClnyaqBDQo74uHgXsm5pso5QRC…' │ 'v1:Do6+bVERpyY55J0cTaoRB6+z6WC37bF4GmUW130q9FK7e…' │ 'gharim' │ 1          │ '348a7010c3e11e048f83d2952d0c9ff8878846a0005c9b26…' │ 11       │ '2026-03-01T02:00:00.000Z' │
+│ 3       │ 4  │ 'v1:0D2DEhKKD76zUFv/V5v7STYBPyLCHI4Z+Z9N5YX396Z2d…' │ 'v1:twU5G06B7fgJhalNT2tG3uLPTCnqRgJK7erVeX9ESx1AF…' │ 'v1:mWPBgeL5wmSwdM0RDAV6V6rFfrpq1avdqyPPeP/HoWgN0…' │ 'miskin' │ 2          │ '322f6959fbb49c91e6cbae2a9d58699f439ff4ca9e461924…' │ 12       │ '2026-03-01T02:00:00.000Z' │
+│ 4       │ 5  │ 'v1:bbCnIWCHD3IkggNUoMJxzcPr15/9d1BsgJXS+DhkID+oI…' │ 'v1:UCKLGu4vorYWDVWwfFW/HIuHYsvIIhm/36NBDXj6fRATA…' │ 'v1:RorG4ru8HxzHHSdfHjzo12Jmtu0sTUF6ulr7DeX3chWDp…' │ 'fakir'  │ 2          │ '8938a1a783640e98db9e81ce69e4ca18010f9a5f5cbf8836…' │ 13       │ '2026-03-01T02:00:00.000Z' │
+│ 5       │ 6  │ 'v1:rq+WPKD/22KIm4RvQm8C5VBJcJRQNDZOpp2yA/K1bMwro…' │ 'v1:yydnWDbOlBQhIOltBj/vtgH7rJb+dvq5MVdSW9tXv8iw/…' │ 'v1:dwDPSD6clwh1Y9DeSuFrc17DKW7SVakiLTP0jCdKqkvtw…' │ 'mualaf' │ 2          │ 'f2650ab04b6153a726332e63f4486bb97ed76b67866f8917…' │ 14       │ '2026-03-01T02:00:00.000Z' │
+│ 6       │ 7  │ 'v1:lGZFiYZkEOO3Ia4bT5eYdsnAKo/FMxKBmkLVrm0V/ZjKP…' │ 'v1:FToUH1izCXUcrzkUPGylba6yFzjmUR4OBvV//JO1Eiolz…' │ 'v1:NxV4Ug6vjvo7dvWFqCsWQMXvv/cOVNSUdjK3omSn1i3q2…' │ 'miskin' │ 3          │ 'b1abc87bf2279463aeff9180eec94cae73abecb545ea8b8d…' │ 15       │ '2026-03-01T02:00:00.000Z' │
+│ 7       │ 8  │ 'v1:TguHpd0rKPYNaOtOhDAdC4HXU25uk9/FMidQKGyd28um'   │ 'v1:zNB3JRFXxM03SUyiiy5LG7HBqzg12Xw+Mouvd25ECuKDO…' │ 'v1:RUb/o6x2BtnvbxKTPJwy3/VvhMhMmYQeEXPFZi1VN0jYP…' │ 'fakir'  │ 3          │ '1c857a2c60b2f7a2fb54223d17bdc90bb92a8a5afb011a33…' │ 16       │ '2026-03-01T02:00:00.000Z' │
+│ 8       │ 9  │ 'v1:80PfL7xYPyfZqVcH+6VMh5MZGFXjQydud87fbolYzPBzk…' │ 'v1:/uqBvn8zsItz6fFxYrYYCFs1IqIrgV74YbTO+nGNBfdc7…' │ null                                                │ 'miskin' │ 3          │ '14909ce62880db30df335f7435f6c9e435f04148b137fe8b…' │ 17       │ '2026-03-01T02:00:00.000Z' │
+└─────────┴────┴─────────────────────────────────────────────────────┴─────────────────────────────────────────────────────┴─────────────────────────────────────────────────────┴──────────┴────────────┴─────────────────────────────────────────────────────┴──────────┴────────────────────────────┘
+== pengguna (6 baris)
+┌─────────┬────┬───────────────┬─────────────────────────────────────────────────────┬─────────────┬────────────┬────────────┬─────────────┬────────────────────────────┐
+│ (index) │ id │ nama_pengguna │ kata_sandi_hash                                     │ peran       │ wilayah_id │ donatur_id │ mustahik_id │ dibuat_pada                │
+├─────────┼────┼───────────────┼─────────────────────────────────────────────────────┼─────────────┼────────────┼────────────┼─────────────┼────────────────────────────┤
+│ 0       │ 1  │ 'admin'       │ 'scrypt$32768$8$3$5YOT34553Hoyw0lXPzWZkw==$eAnojH…' │ 'admin'     │ null       │ null       │ null        │ '2026-03-01T02:00:00.000Z' │
+│ 1       │ 2  │ 'bendahara'   │ 'scrypt$32768$8$3$EMV/0YVmD+iwKu2wYrTrWA==$aeFEyN…' │ 'bendahara' │ null       │ null       │ null        │ '2026-03-01T02:00:00.000Z' │
+│ 2       │ 3  │ 'amil-rw01'   │ 'scrypt$32768$8$3$oyd5Bgvs/3PMCtplDF2yRw==$OTDXdM…' │ 'amil'      │ 1          │ null       │ null        │ '2026-03-01T02:00:00.000Z' │
+│ 3       │ 4  │ 'amil-rw02'   │ 'scrypt$32768$8$3$6z3jlNFGMp/coo74JdM1hA==$Np9xQp…' │ 'amil'      │ 2          │ null       │ null        │ '2026-03-01T02:00:00.000Z' │
+│ 4       │ 5  │ 'donatur-01'  │ 'scrypt$32768$8$3$dcheLe/desM3qCcMEUpzBg==$qu0xh3…' │ 'pemilik'   │ null       │ 1          │ null        │ '2026-03-01T02:00:00.000Z' │
+│ 5       │ 6  │ 'donatur-02'  │ 'scrypt$32768$8$3$qTSAQo1NuZhq5aJ7JqOsrg==$3RbRh0…' │ 'pemilik'   │ null       │ 2          │ null        │ '2026-03-01T02:00:00.000Z' │
+└─────────┴────┴───────────────┴─────────────────────────────────────────────────────┴─────────────┴────────────┴────────────┴─────────────┴────────────────────────────┘
+== sesi (0 baris)
+┌─────────┐
+│ (index) │
+├─────────┤
+└─────────┘
+== donasi (16 baris)
+┌─────────┬────┬────────────┬────────────────┬─────────┬──────────────┬──────────────┬────────────────────────────┐
+│ (index) │ id │ donatur_id │ jenis          │ nominal │ tanggal      │ dicatat_oleh │ dibuat_pada                │
+├─────────┼────┼────────────┼────────────────┼─────────┼──────────────┼──────────────┼────────────────────────────┤
+│ 0       │ 1  │ 1          │ 'zakat_fitrah' │ 200000  │ '2026-03-15' │ 2            │ '2026-03-15T03:00:00.000Z' │
+│ 1       │ 2  │ 2          │ 'zakat_fitrah' │ 150000  │ '2026-03-16' │ 2            │ '2026-03-16T03:00:00.000Z' │
+│ 2       │ 3  │ 3          │ 'zakat_fitrah' │ 100000  │ '2026-03-17' │ 2            │ '2026-03-17T03:00:00.000Z' │
+│ 3       │ 4  │ null       │ 'infak'        │ 500000  │ '2026-09-04' │ 2            │ '2026-09-04T03:00:00.000Z' │
+│ 4       │ 5  │ 4          │ 'zakat_mal'    │ 2500000 │ '2026-09-12' │ 2            │ '2026-09-12T03:00:00.000Z' │
+│ 5       │ 6  │ 1          │ 'infak'        │ 250000  │ '2026-09-18' │ 2            │ '2026-09-18T03:00:00.000Z' │
+│ 6       │ 7  │ 5          │ 'sedekah'      │ 300000  │ '2026-09-25' │ 2            │ '2026-09-25T03:00:00.000Z' │
+│ 7       │ 8  │ 6          │ 'wakaf'        │ 1000000 │ '2026-10-02' │ 2            │ '2026-10-02T03:00:00.000Z' │
+│ 8       │ 9  │ 7          │ 'zakat_mal'    │ 4200000 │ '2026-10-09' │ 2            │ '2026-10-09T03:00:00.000Z' │
+│ 9       │ 10 │ null       │ 'sedekah'      │ 150000  │ '2026-10-16' │ 2            │ '2026-10-16T03:00:00.000Z' │
+│ 10      │ 11 │ 2          │ 'infak'        │ 200000  │ '2026-10-23' │ 2            │ '2026-10-23T03:00:00.000Z' │
+│ 11      │ 12 │ 8          │ 'sedekah'      │ 100000  │ '2026-10-30' │ 2            │ '2026-10-30T03:00:00.000Z' │
+│ 12      │ 13 │ 3          │ 'zakat_mal'    │ 1750000 │ '2026-11-06' │ 2            │ '2026-11-06T03:00:00.000Z' │
+│ 13      │ 14 │ 1          │ 'sedekah'      │ 125000  │ '2026-11-13' │ 2            │ '2026-11-13T03:00:00.000Z' │
+│ 14      │ 15 │ null       │ 'infak'        │ 1000000 │ '2026-11-20' │ 2            │ '2026-11-20T03:00:00.000Z' │
+│ 15      │ 16 │ 4          │ 'infak'        │ 300000  │ '2026-11-20' │ 2            │ '2026-11-20T03:00:00.000Z' │
+└─────────┴────┴────────────┴────────────────┴─────────┴──────────────┴──────────────┴────────────────────────────┘
+== penyaluran (12 baris)
+┌─────────┬────┬─────────────┬────────────────┬─────────┬──────────────┬──────────────┬────────────────────────────┐
+│ (index) │ id │ mustahik_id │ jenis_dana     │ nominal │ tanggal      │ dicatat_oleh │ dibuat_pada                │
+├─────────┼────┼─────────────┼────────────────┼─────────┼──────────────┼──────────────┼────────────────────────────┤
+│ 0       │ 1  │ 1           │ 'zakat_fitrah' │ 150000  │ '2026-03-18' │ 2            │ '2026-03-18T03:00:00.000Z' │
+│ 1       │ 2  │ 5           │ 'zakat_fitrah' │ 150000  │ '2026-03-18' │ 2            │ '2026-03-18T03:00:00.000Z' │
+│ 2       │ 3  │ 8           │ 'zakat_fitrah' │ 150000  │ '2026-03-19' │ 2            │ '2026-03-19T03:00:00.000Z' │
+│ 3       │ 4  │ 2           │ 'zakat_mal'    │ 750000  │ '2026-09-20' │ 2            │ '2026-09-20T03:00:00.000Z' │
+│ 4       │ 5  │ 3           │ 'zakat_mal'    │ 1500000 │ '2026-09-27' │ 2            │ '2026-09-27T03:00:00.000Z' │
+│ 5       │ 6  │ 4           │ 'infak'        │ 400000  │ '2026-10-05' │ 2            │ '2026-10-05T03:00:00.000Z' │
+│ 6       │ 7  │ 6           │ 'zakat_mal'    │ 500000  │ '2026-10-12' │ 2            │ '2026-10-12T03:00:00.000Z' │
+│ 7       │ 8  │ 7           │ 'sedekah'      │ 400000  │ '2026-10-19' │ 2            │ '2026-10-19T03:00:00.000Z' │
+│ 8       │ 9  │ 1           │ 'infak'        │ 300000  │ '2026-10-26' │ 2            │ '2026-10-26T03:00:00.000Z' │
+│ 9       │ 10 │ 9           │ 'zakat_mal'    │ 750000  │ '2026-11-02' │ 2            │ '2026-11-02T03:00:00.000Z' │
+│ 10      │ 11 │ 5           │ 'sedekah'      │ 250000  │ '2026-11-09' │ 2            │ '2026-11-09T03:00:00.000Z' │
+│ 11      │ 12 │ 8           │ 'infak'        │ 350000  │ '2026-11-16' │ 2            │ '2026-11-16T03:00:00.000Z' │
+└─────────┴────┴─────────────┴────────────────┴─────────┴──────────────┴──────────────┴────────────────────────────┘

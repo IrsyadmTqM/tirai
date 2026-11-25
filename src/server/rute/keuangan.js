@@ -10,11 +10,11 @@ import * as v from '../validasi.js';
 
 const NOMINAL_MAKS = 10_000_000_000;
 
-export function ruteKeuangan({ db }) {
+export function ruteKeuangan({ db, brankas }) {
   const r = Router();
 
   r.get('/buku-kas', wajib('buku_kas:baca', 'buku_kas:ringkas', 'buku_kas:wilayah'), (req, res) => {
-    const { tampilan } = susunBukuKas(db, req.pengguna);
+    const { tampilan } = susunBukuKas(db, brankas, req.pengguna);
     res.json(tampilan);
   });
 

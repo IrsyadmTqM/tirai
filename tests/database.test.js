@@ -9,6 +9,7 @@ import {
 import { INVENTARIS } from '../src/server/db/inventaris.js';
 import * as data from '../src/server/db/data-sintetis.js';
 import { cocokkanSandi } from '../src/server/keamanan/sandi.js';
+import { kunciUji } from './bantuan.js';
 
 function daftarTabel(db) {
   return db
@@ -62,7 +63,7 @@ describe('skema dan minimisasi data', () => {
 describe('batasan integritas di database', () => {
   let db;
   beforeAll(async () => {
-    db = await buatDatabaseSintetis();
+    db = await buatDatabaseSintetis(':memory:', kunciUji());
   });
 
   const waktu = data.AWAL_DATA;
@@ -70,7 +71,7 @@ describe('batasan integritas di database', () => {
     db
       .prepare(
         `INSERT INTO mustahik (nama, alamat, asnaf, wilayah_id, nik_hmac, dibuat_pada)
-         VALUES ('Uji', 'Alamat uji', ?, ?, ?, ?)`,
+         VALUES ('v1:uji', 'v1:uji', ?, ?, ?, ?)`,
       )
       .run(asnaf, wilayah, nik, waktu);
   const tambahPengguna = (nama, peran, { wilayah = null, donatur = null, mustahik = null } = {}) =>
@@ -115,15 +116,16 @@ describe('batasan integritas di database', () => {
   });
 
   it('menolak penanda NIK yang sama untuk dua mustahik (cegah penerima ganda)', () => {
-    tambahMustahik(1, 'miskin', 'hmac-uji-sama');
-    expect(() => tambahMustahik(2, 'miskin', 'hmac-uji-sama')).toThrow(/UNIQUE/);
+    const penanda = 'a'.repeat(64);
+    tambahMustahik(1, 'miskin', penanda);
+    expect(() => tambahMustahik(2, 'miskin', penanda)).toThrow(/UNIQUE/);
   });
 });
 
 describe('data sintetis', () => {
   let db;
   beforeAll(async () => {
-    db = await buatDatabaseSintetis();
+    db = await buatDatabaseSintetis(':memory:', kunciUji());
   });
 
   it('jumlah baris sesuai data sumber', () => {
@@ -131,6 +133,7 @@ describe('data sintetis', () => {
       wilayah: data.WILAYAH.length,
       donatur: data.DONATUR.length,
       mustahik: data.MUSTAHIK.length,
+      kunci_data: data.DONATUR.length + data.MUSTAHIK.length,
       pengguna: data.PENGGUNA.length,
       sesi: 0,
       donasi: data.DONASI.length,
@@ -138,10 +141,10 @@ describe('data sintetis', () => {
     });
   });
 
-  it('kontak donatur hanya memakai domain .test yang dicadangkan', () => {
-    const kontak = db.prepare('SELECT kontak FROM donatur WHERE kontak IS NOT NULL').all();
+  it('kontak donatur sintetis hanya memakai domain .test yang dicadangkan', () => {
+    const kontak = data.DONATUR.filter((d) => d.kontak).map((d) => d.kontak);
     expect(kontak.length).toBeGreaterThan(0);
-    for (const { kontak: k } of kontak) expect(k).toMatch(/@contoh\.test$/);
+    for (const k of kontak) expect(k).toMatch(/@contoh\.test$/);
   });
 
   it('ada akun untuk setiap peran', () => {

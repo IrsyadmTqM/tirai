@@ -4,12 +4,13 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { Brankas } from '../keamanan/brankas.js';
 import { hashSandi } from '../keamanan/sandi.js';
 import * as data from './data-sintetis.js';
 
 const SKEMA = fs.readFileSync(new URL('./skema.sql', import.meta.url), 'utf8');
 
-export const TABEL = ['wilayah', 'donatur', 'mustahik', 'pengguna', 'sesi', 'donasi', 'penyaluran'];
+export const TABEL = ['wilayah', 'kunci_data', 'donatur', 'mustahik', 'pengguna', 'sesi', 'donasi', 'penyaluran'];
 
 // Lokasi berkas database: DB_PATH dari .env, atau data/tirai.db di akar proyek.
 export function lokasiDatabase() {
@@ -21,6 +22,8 @@ export function bukaDatabase(lokasi = ':memory:') {
   if (lokasi !== ':memory:') fs.mkdirSync(path.dirname(lokasi), { recursive: true });
   const db = new DatabaseSync(lokasi);
   db.exec('PRAGMA foreign_keys = ON');
+  // Isi yang dihapus ditimpa nol di berkas, tidak sekadar ditandai bebas.
+  db.exec('PRAGMA secure_delete = ON');
   return db;
 }
 
@@ -40,7 +43,12 @@ export function dalamTransaksi(db, kerja) {
   }
 }
 
-export async function isiDataSintetis(db) {
+// kunci: { master, nik } dari muatKunci(). Kolom sensitif dienkripsi
+// dengan kunci data milik tiap donatur dan mustahik.
+export async function isiDataSintetis(db, kunci) {
+  if (!kunci?.master || !kunci?.nik) throw new Error('isiDataSintetis membutuhkan kunci');
+  const brankas = new Brankas(db, kunci);
+
   // Hash dihitung di luar transaksi karena scrypt berjalan asinkron.
   // Tiap akun mendapat salt acak sendiri walaupun kata sandinya sama.
   const hashSandiAkun = await Promise.all(data.PENGGUNA.map(() => hashSandi(data.KATA_SANDI_DEMO)));
@@ -50,16 +58,30 @@ export async function isiDataSintetis(db) {
     for (const w of data.WILAYAH) tambahWilayah.run(w.id, w.nama);
 
     const tambahDonatur = db.prepare(
-      'INSERT INTO donatur (id, nama, kontak, dibuat_pada) VALUES (?, ?, ?, ?)',
+      'INSERT INTO donatur (id, nama, kontak, kunci_id, dibuat_pada) VALUES (?, ?, ?, ?, ?)',
     );
-    for (const d of data.DONATUR) tambahDonatur.run(d.id, d.nama, d.kontak, data.AWAL_DATA);
+    for (const d of data.DONATUR) {
+      const k = brankas.buatKunciPemilik();
+      tambahDonatur.run(d.id, d.nama, brankas.enkripsi(k, d.kontak, 'donatur.kontak'), k, data.AWAL_DATA);
+    }
 
     const tambahMustahik = db.prepare(
-      `INSERT INTO mustahik (id, nama, alamat, kondisi, asnaf, wilayah_id, nik_hmac, dibuat_pada)
-       VALUES (?, ?, ?, ?, ?, ?, NULL, ?)`,
+      `INSERT INTO mustahik (id, nama, alamat, kondisi, asnaf, wilayah_id, nik_hmac, kunci_id, dibuat_pada)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     for (const m of data.MUSTAHIK) {
-      tambahMustahik.run(m.id, m.nama, m.alamat, m.kondisi, m.asnaf, m.wilayah_id, data.AWAL_DATA);
+      const k = brankas.buatKunciPemilik();
+      tambahMustahik.run(
+        m.id,
+        brankas.enkripsi(k, m.nama, 'mustahik.nama'),
+        brankas.enkripsi(k, m.alamat, 'mustahik.alamat'),
+        brankas.enkripsi(k, m.kondisi, 'mustahik.kondisi'),
+        m.asnaf,
+        m.wilayah_id,
+        brankas.hmacNik(data.nikSintetis(m.id)),
+        k,
+        data.AWAL_DATA,
+      );
     }
 
     const tambahPengguna = db.prepare(
@@ -106,11 +128,11 @@ function waktuCatat(tanggal) {
 // Membuat database baru berisi skema dan data sintetis.
 // Untuk berkas, isi lama dihapus dulu: database ini memang dibuat ulang
 // setiap server menyala dan hanya berisi data sintetis.
-export async function buatDatabaseSintetis(lokasi = ':memory:') {
+export async function buatDatabaseSintetis(lokasi, kunci) {
   if (lokasi !== ':memory:') hapusBerkasDatabase(lokasi);
   const db = bukaDatabase(lokasi);
   terapkanSkema(db);
-  await isiDataSintetis(db);
+  await isiDataSintetis(db, kunci);
   return db;
 }
 

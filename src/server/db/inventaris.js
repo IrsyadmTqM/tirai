@@ -18,12 +18,25 @@ export const INVENTARIS = {
     },
   },
 
+  kunci_data: {
+    id: { alasan: 'Penanda baris', perlindungan: '-' },
+    kunci_terbungkus: {
+      alasan: 'Kunci data milik satu pemilik data, untuk membuka kolom terenkripsinya',
+      perlindungan: 'Dibungkus AES-256-GCM dengan kunci master yang disimpan di luar database',
+    },
+    dibuat_pada: { alasan: 'Dasar rotasi kunci', perlindungan: '-' },
+  },
+
   donatur: {
     id: { alasan: 'Penanda baris', perlindungan: '-' },
     nama: { alasan: 'Bukti donasi atas nama donatur', perlindungan: 'RBAC' },
     kontak: {
       alasan: 'Opsional: mengirim bukti donasi bila donatur memintanya',
       perlindungan: 'Enkripsi kolom, RBAC',
+    },
+    kunci_id: {
+      alasan: 'Menunjuk kunci data milik donatur ini',
+      perlindungan: 'Tidak dikirim ke browser',
     },
     dibuat_pada: {
       alasan: 'Dasar menghitung masa simpan data',
@@ -56,6 +69,10 @@ export const INVENTARIS = {
     nik_hmac: {
       alasan: 'Mencegah penerima ganda tanpa menyimpan NIK utuh',
       perlindungan: 'HMAC berkunci, NIK asli tidak disimpan',
+    },
+    kunci_id: {
+      alasan: 'Menunjuk kunci data milik mustahik ini',
+      perlindungan: 'Tidak dikirim ke browser',
     },
     dibuat_pada: {
       alasan: 'Dasar menghitung masa simpan data',

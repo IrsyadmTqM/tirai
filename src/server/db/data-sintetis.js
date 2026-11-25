@@ -80,6 +80,10 @@ export const MUSTAHIK = [
   },
 ];
 
+// NIK sintetis: 16 digit berpola 00000000000000xx, jelas bukan NIK sungguhan.
+// NIK ini tidak disimpan; yang masuk database hanya HMAC-nya.
+export const nikSintetis = (idMustahik) => String(idMustahik).padStart(16, '0');
+
 export const PENGGUNA = [
   { id: 1, nama_pengguna: 'admin', peran: 'admin' },
   { id: 2, nama_pengguna: 'bendahara', peran: 'bendahara' },

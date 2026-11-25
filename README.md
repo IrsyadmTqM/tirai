@@ -8,7 +8,7 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 2 (login dan RBAC) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Langkah 3 (enkripsi kolom) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
 
 ## Kebutuhan
 
@@ -23,6 +23,14 @@ cd tirai
 npm install
 cp .env.example .env
 ```
+
+Isi `MASTER_KEY` dan `NIK_HMAC_KEY` di `.env` dengan dua kunci acak yang berbeda. Jalankan perintah ini dua kali, sekali untuk tiap kunci:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Kalau dibiarkan kosong, server tetap berjalan dengan kunci sementara di memori (cukup untuk mencoba, karena database dibuat ulang setiap server menyala).
 
 ## Menjalankan
 
@@ -109,7 +117,7 @@ Beranda menampilkan buku kas peragaan: pengunjung memilih peran dan melihat data
 0. Kerangka proyek (selesai)
 1. Skema database dan data sintetis (selesai)
 2. Login dan RBAC (selesai)
-3. Enkripsi kolom (AES-256-GCM, envelope encryption)
+3. Enkripsi kolom (AES-256-GCM, envelope encryption) (selesai)
 4. Audit log append-only
 5. Beranda buku kas interaktif
 6. Dasbor "Data saya": lihat, riwayat akses, ekspor, hapus
