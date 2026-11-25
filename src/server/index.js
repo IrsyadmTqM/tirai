@@ -1,3 +1,4 @@
+import './muat-env.js';
 import { createApp } from './app.js';
 import { buatDatabaseSintetis, hitungBaris, lokasiDatabase } from './db/index.js';
 import { muatKunci } from './keamanan/kripto.js';

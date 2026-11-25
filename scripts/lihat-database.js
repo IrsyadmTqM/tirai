@@ -3,6 +3,7 @@
 // tersimpan di disk (mulai langkah 3, kolom sensitif harus berupa ciphertext).
 // Jalankan: npm run db:lihat
 
+import '../src/server/muat-env.js';
 import fs from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { TABEL, lokasiDatabase } from '../src/server/db/index.js';

@@ -1,6 +1,7 @@
 // Membuat ulang data/tirai.db berisi skema dan data sintetis.
 // Jalankan: npm run db:reset
 
+import '../src/server/muat-env.js';
 import { buatDatabaseSintetis, hitungBaris, lokasiDatabase } from '../src/server/db/index.js';
 import { muatKunci } from '../src/server/keamanan/kripto.js';
 
