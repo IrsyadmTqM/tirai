@@ -94,6 +94,41 @@ CREATE TABLE sesi (
   kedaluwarsa_pada  TEXT NOT NULL
 ) STRICT;
 
+-- Audit log: siapa, kapan, aksi apa, atas data siapa.
+-- - Hanya bisa ditambah. Trigger di bawah menolak UPDATE dan DELETE,
+--   termasuk dari luar aplikasi.
+-- - Tidak ada kolom teks bebas: semua kolom berupa angka atau pilihan
+--   tetap (CHECK), jadi data pribadi asli tidak mungkin tercatat di sini.
+--   Orang dirujuk lewat nomor (subjek_id), bukan nama.
+-- - Tidak memakai foreign key, supaya catatan tetap ada setelah data
+--   orangnya dihapus.
+CREATE TABLE audit_log (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  waktu         TEXT NOT NULL,
+  pengguna_id   INTEGER,
+  peran         TEXT CHECK (peran IS NULL OR peran IN ('admin', 'bendahara', 'amil', 'pemilik')),
+  aksi          TEXT NOT NULL CHECK (aksi IN (
+                  'baca', 'buat', 'ubah', 'ekspor', 'hapus', 'masuk', 'gagal_masuk', 'keluar')),
+  objek         TEXT NOT NULL CHECK (objek IN (
+                  'buku_kas', 'mustahik', 'donatur', 'donasi', 'penyaluran', 'pengguna',
+                  'audit_log', 'sesi', 'persetujuan', 'permintaan', 'catatan')),
+  subjek_jenis  TEXT CHECK (subjek_jenis IS NULL OR subjek_jenis IN ('donatur', 'mustahik', 'pengguna')),
+  subjek_id     INTEGER,
+  saluran       TEXT NOT NULL CHECK (saluran IN ('aplikasi', 'peragaan')),
+  CHECK ((subjek_jenis IS NULL) = (subjek_id IS NULL))
+) STRICT;
+
+CREATE TRIGGER audit_log_tolak_ubah BEFORE UPDATE ON audit_log
+BEGIN
+  SELECT RAISE(ABORT, 'audit log hanya bisa ditambah');
+END;
+
+CREATE TRIGGER audit_log_tolak_hapus BEFORE DELETE ON audit_log
+BEGIN
+  SELECT RAISE(ABORT, 'audit log hanya bisa ditambah');
+END;
+
+CREATE INDEX idx_audit_subjek ON audit_log(subjek_jenis, subjek_id);
 CREATE INDEX idx_mustahik_wilayah ON mustahik(wilayah_id);
 CREATE INDEX idx_donasi_donatur ON donasi(donatur_id);
 CREATE INDEX idx_penyaluran_mustahik ON penyaluran(mustahik_id);

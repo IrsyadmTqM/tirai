@@ -136,6 +136,7 @@ describe('data sintetis', () => {
       kunci_data: data.DONATUR.length + data.MUSTAHIK.length,
       pengguna: data.PENGGUNA.length,
       sesi: 0,
+      audit_log: 0,
       donasi: data.DONASI.length,
       penyaluran: data.PENYALURAN.length,
     });

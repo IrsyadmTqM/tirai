@@ -8,7 +8,7 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 3 (enkripsi kolom) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Langkah 4 (audit log) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
 
 ## Kebutuhan
 
@@ -118,7 +118,7 @@ Beranda menampilkan buku kas peragaan: pengunjung memilih peran dan melihat data
 1. Skema database dan data sintetis (selesai)
 2. Login dan RBAC (selesai)
 3. Enkripsi kolom (AES-256-GCM, envelope encryption) (selesai)
-4. Audit log append-only
+4. Audit log append-only (selesai)
 5. Beranda buku kas interaktif
 6. Dasbor "Data saya": lihat, riwayat akses, ekspor, hapus
 7. Consent

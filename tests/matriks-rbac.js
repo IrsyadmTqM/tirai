@@ -28,6 +28,7 @@ export const ENDPOINT = [
   },
   { metode: 'get', jalur: '/api/pengguna', boleh: ['admin'] },
   { metode: 'get', jalur: '/api/wilayah', boleh: ['admin'] },
+  { metode: 'get', jalur: '/api/audit', boleh: ['admin'] },
   {
     metode: 'patch',
     jalur: '/api/pengguna/4',

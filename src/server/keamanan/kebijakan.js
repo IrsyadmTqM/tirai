@@ -7,7 +7,7 @@
 export const PERAN = ['admin', 'bendahara', 'amil', 'pemilik'];
 
 export const HAK_PERAN = {
-  admin: ['buku_kas:ringkas', 'ringkasan:baca', 'pengguna:kelola'],
+  admin: ['buku_kas:ringkas', 'ringkasan:baca', 'pengguna:kelola', 'audit:baca'],
   bendahara: [
     'buku_kas:baca',
     'ringkasan:baca',

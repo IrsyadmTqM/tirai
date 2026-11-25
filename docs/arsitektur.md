@@ -110,6 +110,16 @@ Batasan yang perlu ditulis jujur di laporan:
 - Nama donatur tidak dienkripsi, sesuai inventaris data (cukup RBAC). Ini bisa diubah bila tim menilai perlu.
 - Bila `MASTER_KEY` kosong, server memakai kunci sementara di memori. Ini cukup untuk prototipe karena database dibuat ulang setiap server menyala. Pada pemasangan sungguhan, kunci wajib diisi dan sebaiknya disimpan di pengelola rahasia, bukan berkas `.env`.
 
-## Rencana lanjutan
+## Audit log (langkah 4)
 
-- Audit log append-only, dikunci juga di level database dengan trigger yang menolak UPDATE dan DELETE.
+Tabel `audit_log` mencatat siapa (akun dan peran), kapan, aksi (baca, buat, ubah, ekspor, hapus, masuk, gagal masuk, keluar), jenis data, dan data siapa (nomor donatur, mustahik, atau akun).
+
+- Hanya bisa ditambah. Dua trigger database menolak `UPDATE` dan `DELETE`, termasuk dari luar aplikasi. Aplikasi juga tidak punya endpoint untuk mengubah atau menghapus catatan.
+- Tidak memuat data pribadi asli, dan hal ini dijamin oleh skema: semua kolom berupa angka atau pilihan tetap yang dibatasi `CHECK`, tanpa kolom teks bebas. Orang dirujuk lewat nomor. Tes juga mencari semua nama, alamat, kondisi, kontak, NIK, dan kata sandi sintetis di seluruh isi log.
+- Membaca daftar dicatat per orang. Bendahara yang membuka buku kas menghasilkan satu catatan umum ditambah satu catatan untuk tiap mustahik yang namanya terlihat. Amil hanya menghasilkan catatan untuk mustahik di wilayahnya. Admin tidak menghasilkan catatan per orang karena tidak melihat identitas siapa pun. Dengan cara ini riwayat akses tiap pemilik data (langkah 6) bisa disusun dari log.
+- Gagal masuk dicatat tanpa nama pengguna yang dicoba dan tanpa kata sandinya.
+- Membaca audit log juga dicatat.
+- Akses dari peragaan beranda dicatat dengan saluran `peragaan`, supaya bisa dibedakan dari akses akun sungguhan.
+- Tidak memakai foreign key, sehingga catatan tetap ada setelah data orangnya dihapus. Nomor donatur, mustahik, dan akun memakai `AUTOINCREMENT`, jadi nomor lama tidak pernah berpindah ke orang lain.
+
+Batasan: pemilik berkas database (misalnya admin server) tetap bisa menghapus berkasnya atau mematikan trigger dengan akses langsung ke SQLite. Trigger mencegah perubahan lewat aplikasi dan kelalaian, bukan penyerang yang menguasai server. Untuk itu diperlukan penyimpanan log terpisah atau rantai hash, dan ini di luar cakupan prototipe.

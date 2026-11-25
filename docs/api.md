@@ -33,6 +33,7 @@ Diuji otomatis di `tests/rbac.test.js` (daftar di `tests/matriks-rbac.js`).
 | `GET /api/pengguna` | ya | tidak | tidak | tidak |
 | `GET /api/wilayah` | ya | tidak | tidak | tidak |
 | `PATCH /api/pengguna/:id` | ya | tidak | tidak | tidak |
+| `GET /api/audit` | ya | tidak | tidak | tidak |
 
 ## Autentikasi
 
@@ -114,8 +115,23 @@ Hanya amil, untuk wilayahnya sendiri. Badan: `{ "nama", "alamat", "kondisi" (ops
 
 Badan: `{ "peran": "admin|bendahara|amil", "wilayah_id": 2 }` (`wilayah_id` wajib untuk amil). Hanya untuk akun staf, dan admin tidak bisa mengubah perannya sendiri. Perubahan berlaku pada permintaan berikutnya, termasuk sesi yang sedang berjalan.
 
+## Audit log
+
+### `GET /api/audit?batas=200`
+
+Hanya admin. Catatan terbaru di atas, `batas` 1 sampai 500.
+
+```json
+{ "log": [ { "id": 41, "waktu": "2026-11-25T10:00:00.000Z", "pelaku": "bendahara", "peran": "bendahara",
+             "aksi": "baca", "objek": "mustahik", "subjek": { "jenis": "mustahik", "id": 3 }, "saluran": "aplikasi" } ] }
+```
+
+Membaca audit log juga dicatat. Tidak ada endpoint untuk mengubah atau menghapus catatan.
+
+Endpoint yang mencatat ke audit log: masuk (berhasil dan gagal), keluar, `GET /api/buku-kas`, `GET /api/donatur`, `GET /api/donasi`, `GET /api/mustahik`, `GET /api/pengguna`, `GET /api/audit`, semua endpoint pengubah data, dan peragaan beranda.
+
 ## Peragaan beranda
 
 ### `GET /api/peragaan/buku-kas?peran=admin|bendahara|amil`
 
-Tanpa masuk. Menjawab buku kas persis seperti `GET /api/buku-kas` untuk akun demo peran itu (amil: RW 01), ditambah `"peragaan": true`. Hanya untuk data sintetis. Dimatikan dengan `MODE_PERAGAAN=mati`, setelah itu menjawab 404.
+Tanpa masuk. Menjawab buku kas persis seperti `GET /api/buku-kas` untuk akun demo peran itu (amil: RW 01), ditambah `"peragaan": true` dan `"log"`: catatan audit log yang baru dibuat oleh akses ini (saluran `peragaan`). Hanya untuk data sintetis. Dimatikan dengan `MODE_PERAGAAN=mati`, setelah itu menjawab 404.
