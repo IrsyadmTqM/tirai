@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Tirai: aplikasi ZISWAF privacy-first (tugas besar ICT dan Islam)",
   "scripts": {
-    "dev": "concurrently -n server,web -c green,blue \"node --disable-warning=ExperimentalWarning --watch --env-file-if-exists=.env src/server/index.js\" \"vite\"",
+    "dev": "concurrently -n server,web -c green,blue \"node --disable-warning=ExperimentalWarning --watch src/server/index.js\" \"vite\"",
     "build": "vite build",
-    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server/index.js",
+    "start": "node --disable-warning=ExperimentalWarning src/server/index.js",
     "test": "vitest run",
-    "db:reset": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/db-reset.js",
-    "db:lihat": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/lihat-database.js",
+    "db:reset": "node --disable-warning=ExperimentalWarning scripts/db-reset.js",
+    "db:lihat": "node --disable-warning=ExperimentalWarning scripts/lihat-database.js",
     "docs:inventaris": "node scripts/tulis-inventaris.js"
   },
   "author": "",
