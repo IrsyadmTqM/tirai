@@ -10,11 +10,14 @@ import {
   daftarMustahik,
   daftarPengguna,
   daftarWilayah,
+  mustahikAktifDiWilayah,
   nikTerdaftar,
   tambahMustahik,
   ubahPeran,
 } from '../data/orang.js';
 import { normalkanNik } from '../keamanan/kripto.js';
+import { kirimEkspor, paketEkspor } from '../layanan/data-pribadi.js';
+import { ajukanHapus, permintaanTerakhir } from '../layanan/penghapusan.js';
 import { boleh } from '../keamanan/kebijakan.js';
 import { wajib } from '../keamanan/middleware.js';
 import * as v from '../validasi.js';
@@ -73,6 +76,31 @@ export function ruteOrang({ db, brankas }) {
     const id = dalamTransaksi(db, () => tambahMustahik(db, brankas, data));
     catat(db, { pengguna: req.pengguna, aksi: 'buat', objek: 'mustahik', subjek: { jenis: 'mustahik', id } });
     res.status(201).json({ id });
+  });
+
+  // Hak mustahik yang tidak punya akun dijalankan lewat amil wilayahnya.
+  // Mustahik di wilayah lain dijawab 404, bukan 403, supaya keberadaannya
+  // tidak terbaca.
+  const subjekMustahikWilayah = (req) => {
+    const id = v.idDariJalur(req.params.id);
+    if (!mustahikAktifDiWilayah(db, id, req.pengguna.wilayah_id)) {
+      throw new v.GalatPermintaan('Mustahik tidak ditemukan di wilayah Anda', 404);
+    }
+    return { jenis: 'mustahik', id };
+  };
+
+  r.get('/mustahik/:id/ekspor', wajib('mustahik:ekspor_wilayah'), (req, res) => {
+    const subjek = subjekMustahikWilayah(req);
+    const format = v.pilihan(req.query.format ?? 'json', 'Format', ['json', 'csv']);
+    catat(db, { pengguna: req.pengguna, aksi: 'ekspor', objek: 'mustahik', subjek });
+    kirimEkspor(res, paketEkspor(db, brankas, subjek), format, `data-mustahik-${subjek.id}`);
+  });
+
+  r.post('/mustahik/:id/hapus', wajib('mustahik:hapus_wilayah'), (req, res) => {
+    const subjek = subjekMustahikWilayah(req);
+    const id = ajukanHapus(db, { subjek, diajukanPeran: 'amil' });
+    catat(db, { pengguna: req.pengguna, aksi: 'buat', objek: 'permintaan', subjek });
+    res.status(201).json({ id, permintaan_hapus: permintaanTerakhir(db, subjek) });
   });
 
   r.get('/pengguna', wajib('pengguna:kelola'), (req, res) => {

@@ -4,12 +4,15 @@ import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import './styles.css';
 import App from './App.jsx';
+import { PenyediaPemberitahuan } from './komponen/Pemberitahuan.jsx';
 import { pasangPengaturanGerak } from './lib/gerak.js';
 
 pasangPengaturanGerak();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <PenyediaPemberitahuan>
+      <App />
+    </PenyediaPemberitahuan>
   </StrictMode>,
 );

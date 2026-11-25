@@ -35,4 +35,13 @@ export const ENDPOINT = [
     body: { peran: 'amil', wilayah_id: 2 },
     boleh: ['admin'],
   },
+  { metode: 'get', jalur: '/api/mustahik/1/ekspor', boleh: ['amil'] },
+  { metode: 'post', jalur: '/api/mustahik/2/hapus', boleh: ['amil'] },
+  { metode: 'get', jalur: '/api/data-saya', boleh: ['pemilik'] },
+  { metode: 'get', jalur: '/api/data-saya/riwayat', boleh: ['pemilik'] },
+  { metode: 'get', jalur: '/api/data-saya/ekspor?format=csv', boleh: ['pemilik'] },
+  { metode: 'post', jalur: '/api/data-saya/hapus', boleh: ['pemilik'] },
+  { metode: 'get', jalur: '/api/permintaan', boleh: ['admin'] },
+  // Permintaan nomor 1 dibuat oleh baris di atas; ditolak supaya akun uji tetap ada.
+  { metode: 'post', jalur: '/api/permintaan/1/proses', body: { keputusan: 'tolak' }, boleh: ['admin'] },
 ];

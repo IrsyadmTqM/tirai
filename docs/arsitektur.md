@@ -138,3 +138,38 @@ Batasan: pemilik berkas database (misalnya admin server) tetap bisa menghapus be
 - Content-Security-Policy `default-src 'self'` tetap berlaku: tidak ada skrip atau gaya dari luar, dan konsol browser bersih saat diuji.
 
 Bukti: tangkapan layar dan video di `docs/bukti-uji/langkah-5-*`.
+
+## Dasbor Data saya dan penghapusan (langkah 6)
+
+Pemilik data (donatur dengan akun) membuka dasbor "Data saya":
+
+- Data tersimpan: setiap field beserta alasan pengumpulan dan perlindungannya. Teks alasan diambil langsung dari [`inventaris.js`](../src/server/db/inventaris.js), sumber yang sama dengan tes minimisasi.
+- Riwayat akses: disusun dari audit log. Pelaku hanya ditampilkan sebagai peran ("Bendahara membaca data Anda"), tanpa nama akun staf.
+- Unduh: JSON dan CSV, berisi data, transaksi, dan riwayat akses. Ekspor dicatat di audit log. CSV menetralkan nilai yang diawali `=`, `+`, `-`, atau `@` supaya tidak dijalankan sebagai rumus oleh aplikasi lembar kerja.
+- Hapus: pemilik mengajukan permintaan, admin memprosesnya. Paling banyak satu permintaan yang menunggu untuk tiap orang (dijaga indeks unik parsial).
+
+Mustahik yang tidak punya akun menjalankan hak yang sama lewat amil wilayahnya: amil bisa mengunduh data penerima di wilayahnya dan mengajukan penghapusan atas nama penerima. Mustahik di wilayah lain dijawab 404, sehingga keberadaannya tidak terbaca. Semua tindakan ini tercatat di audit log.
+
+Admin memproses permintaan tanpa melihat nama: orang ditampilkan sebagai nomor (`donatur #1`, `mustahik #2`).
+
+Bila permintaan disetujui (usulan awal, perlu keputusan tim dan dosen):
+
+| Data | Donatur | Mustahik |
+| --- | --- | --- |
+| Identitas (nama, kontak, alamat, kondisi) | baris donatur dihapus | kolom dikosongkan, baris ditandai `dianonimkan_pada` |
+| Penanda NIK | tidak ada | dikosongkan |
+| Kunci data | dimusnahkan | dimusnahkan |
+| Akun dan sesi | dihapus | dihapus bila ada |
+| Catatan keuangan | donasi tetap ada sebagai donasi tanpa nama | penyaluran tetap ada dengan asnaf dan wilayah |
+| Audit log | tetap ada (isinya hanya nomor) | tetap ada |
+
+Alasan mustahik dianonimkan, bukan dihapus barisnya: laporan penyaluran zakat per asnaf tetap bisa disusun setelah identitas penerima dihapus. Database menjaga keadaan ini dengan `CHECK`: baris yang dianonimkan wajib tidak punya identitas sama sekali, dan baris aktif wajib punya nama, alamat, dan kunci.
+
+Dasbor peran lain:
+
+- Bendahara: ringkasan dana (angka berputar ke nilai baru setelah mencatat), formulir catat donasi dan penyaluran, buku kas, donasi terbaru.
+- Amil: daftar penerima di wilayahnya dengan tombol unduh dan ajukan hapus, formulir pendaftaran penerima baru (NIK hanya untuk penanda), buku kas.
+- Admin: ringkasan, permintaan hapus, akun dan peran, audit log, buku kas ringkas.
+
+Setiap aksi memunculkan konfirmasi singkat di bawah layar (`role="status"`), dan aksi yang tidak bisa dibatalkan (hapus) meminta konfirmasi dua langkah.
+

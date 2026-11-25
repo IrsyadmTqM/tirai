@@ -6,6 +6,7 @@ import { Brankas } from './keamanan/brankas.js';
 import { asalSama, headerKeamanan, kenaliPengguna } from './keamanan/middleware.js';
 import { ruteAudit } from './rute/audit.js';
 import { ruteAutentikasi } from './rute/autentikasi.js';
+import { ruteDataSaya } from './rute/data-saya.js';
 import { ruteKeuangan } from './rute/keuangan.js';
 import { ruteOrang } from './rute/orang.js';
 import { rutePeragaan } from './rute/peragaan.js';
@@ -45,6 +46,7 @@ export function createApp({ db, kunci, opsi = {} } = {}) {
   api.use(ruteKeuangan(konteks));
   api.use(ruteOrang(konteks));
   api.use(ruteAudit(konteks));
+  api.use(ruteDataSaya(konteks));
 
   // Endpoint API yang tidak dikenal: 404 dalam bentuk JSON.
   api.use((req, res) => {

@@ -74,6 +74,10 @@ export const INVENTARIS = {
       alasan: 'Menunjuk kunci data milik mustahik ini',
       perlindungan: 'Tidak dikirim ke browser',
     },
+    dianonimkan_pada: {
+      alasan: 'Menandai data yang sudah dihapus atas permintaan, sementara catatan penyaluran tetap ada',
+      perlindungan: '-',
+    },
     dibuat_pada: {
       alasan: 'Dasar menghitung masa simpan data',
       perlindungan: 'RBAC',
@@ -116,6 +120,16 @@ export const INVENTARIS = {
       alasan: 'Sesi berakhir otomatis setelah 8 jam',
       perlindungan: '-',
     },
+  },
+
+  permintaan_hapus: {
+    id: { alasan: 'Penanda baris', perlindungan: '-' },
+    subjek_jenis: { alasan: 'Jenis data yang diminta dihapus: donatur atau mustahik', perlindungan: 'Pilihan tetap' },
+    subjek_id: { alasan: 'Nomor orang yang datanya diminta dihapus', perlindungan: 'Nomor saja, admin tidak melihat nama' },
+    diajukan_peran: { alasan: 'Diajukan sendiri atau oleh amil atas nama mustahik', perlindungan: 'Pilihan tetap' },
+    diajukan_pada: { alasan: 'Kapan permintaan diajukan', perlindungan: '-' },
+    status: { alasan: 'Menunggu, disetujui, atau ditolak', perlindungan: 'Pilihan tetap' },
+    diproses_pada: { alasan: 'Kapan permintaan diproses admin', perlindungan: '-' },
   },
 
   audit_log: {

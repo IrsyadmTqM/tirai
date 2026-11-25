@@ -1,0 +1,107 @@
+{
+  "keterangan": "Ekspor data pribadi dari Tirai. Prototipe dengan data sintetis.",
+  "dibuat_pada": "2026-11-25T19:23:44.695Z",
+  "subjek": {
+    "jenis": "donatur",
+    "id": 1
+  },
+  "data": [
+    {
+      "kolom": "nama",
+      "label": "Nama",
+      "nilai": "Ahmad Fauzi",
+      "alasan": "Bukti donasi atas nama donatur",
+      "perlindungan": "RBAC"
+    },
+    {
+      "kolom": "kontak",
+      "label": "Kontak",
+      "nilai": "ahmad.fauzi@contoh.test",
+      "alasan": "Opsional: mengirim bukti donasi bila donatur memintanya",
+      "perlindungan": "Enkripsi kolom, RBAC"
+    },
+    {
+      "kolom": "dibuat_pada",
+      "label": "Dicatat sejak",
+      "nilai": "2026-03-01T02:00:00.000Z",
+      "alasan": "Dasar menghitung masa simpan data",
+      "perlindungan": "RBAC"
+    },
+    {
+      "kolom": "nama_pengguna",
+      "label": "Nama pengguna",
+      "nilai": "donatur-01",
+      "alasan": "Identitas untuk masuk",
+      "perlindungan": "RBAC"
+    }
+  ],
+  "transaksi": {
+    "jenis": "donasi",
+    "baris": [
+      {
+        "tanggal": "2026-11-25",
+        "jenis": "infak",
+        "nominal": 250000
+      },
+      {
+        "tanggal": "2026-11-13",
+        "jenis": "sedekah",
+        "nominal": 125000
+      },
+      {
+        "tanggal": "2026-09-18",
+        "jenis": "infak",
+        "nominal": 250000
+      },
+      {
+        "tanggal": "2026-03-15",
+        "jenis": "zakat_fitrah",
+        "nominal": 200000
+      }
+    ]
+  },
+  "riwayat_akses": [
+    {
+      "waktu": "2026-11-25T19:23:44.692Z",
+      "peran": "pemilik",
+      "aksi": "ekspor",
+      "objek": "donatur",
+      "saluran": "aplikasi"
+    },
+    {
+      "waktu": "2026-11-25T19:23:44.017Z",
+      "peran": "pemilik",
+      "aksi": "baca",
+      "objek": "donatur",
+      "saluran": "aplikasi"
+    },
+    {
+      "waktu": "2026-11-25T19:23:42.508Z",
+      "peran": "bendahara",
+      "aksi": "baca",
+      "objek": "donatur",
+      "saluran": "aplikasi"
+    },
+    {
+      "waktu": "2026-11-25T19:23:42.495Z",
+      "peran": "bendahara",
+      "aksi": "buat",
+      "objek": "donasi",
+      "saluran": "aplikasi"
+    },
+    {
+      "waktu": "2026-11-25T19:23:42.123Z",
+      "peran": "bendahara",
+      "aksi": "baca",
+      "objek": "donatur",
+      "saluran": "aplikasi"
+    },
+    {
+      "waktu": "2026-11-25T19:23:42.118Z",
+      "peran": "bendahara",
+      "aksi": "baca",
+      "objek": "donatur",
+      "saluran": "aplikasi"
+    }
+  ]
+}

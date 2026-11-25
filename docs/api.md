@@ -34,6 +34,14 @@ Diuji otomatis di `tests/rbac.test.js` (daftar di `tests/matriks-rbac.js`).
 | `GET /api/wilayah` | ya | tidak | tidak | tidak |
 | `PATCH /api/pengguna/:id` | ya | tidak | tidak | tidak |
 | `GET /api/audit` | ya | tidak | tidak | tidak |
+| `GET /api/mustahik/:id/ekspor` | tidak | tidak | wilayahnya | tidak |
+| `POST /api/mustahik/:id/hapus` | tidak | tidak | wilayahnya | tidak |
+| `GET /api/data-saya` | tidak | tidak | tidak | milik sendiri |
+| `GET /api/data-saya/riwayat` | tidak | tidak | tidak | milik sendiri |
+| `GET /api/data-saya/ekspor` | tidak | tidak | tidak | milik sendiri |
+| `POST /api/data-saya/hapus` | tidak | tidak | tidak | milik sendiri |
+| `GET /api/permintaan` | ya | tidak | tidak | tidak |
+| `POST /api/permintaan/:id/proses` | ya | tidak | tidak | tidak |
 
 ## Autentikasi
 
@@ -71,7 +79,7 @@ Buku kas penyaluran yang sudah disaring menurut peran.
 }
 ```
 
-Kolom yang tercantum di `tertutup` bernilai `null`: server tidak mengirim nilai aslinya. Admin dan bendahara juga mendapat `ringkasan` (lihat di bawah).
+Kolom yang tercantum di `tertutup` bernilai `null`: server tidak mengirim nilai aslinya. `dianonimkan: true` menandai penerima yang datanya sudah dihapus atas permintaan. Admin dan bendahara juga mendapat `ringkasan` (lihat di bawah).
 
 ### `GET /api/ringkasan`
 
@@ -114,6 +122,52 @@ Hanya amil, untuk wilayahnya sendiri. Badan: `{ "nama", "alamat", "kondisi" (ops
 ### `PATCH /api/pengguna/:id`
 
 Badan: `{ "peran": "admin|bendahara|amil", "wilayah_id": 2 }` (`wilayah_id` wajib untuk amil). Hanya untuk akun staf, dan admin tidak bisa mengubah perannya sendiri. Perubahan berlaku pada permintaan berikutnya, termasuk sesi yang sedang berjalan.
+
+## Data saya (pemilik data)
+
+### `GET /api/data-saya`
+
+```json
+{
+  "subjek": { "jenis": "donatur", "id": 1 },
+  "data": [ { "kolom": "kontak", "label": "Kontak", "nilai": "ahmad.fauzi@contoh.test",
+              "alasan": "Opsional: mengirim bukti donasi bila donatur memintanya", "perlindungan": "Enkripsi kolom, RBAC" } ],
+  "transaksi": { "jenis": "donasi", "baris": [ { "tanggal": "2026-11-13", "jenis": "sedekah", "nominal": 125000 } ] },
+  "permintaan_hapus": null
+}
+```
+
+### `GET /api/data-saya/riwayat`
+
+`{ "riwayat": [ { "id", "waktu", "peran", "aksi", "objek", "saluran" } ] }`. Pelaku hanya sebagai peran.
+
+### `GET /api/data-saya/ekspor?format=json|csv`
+
+Berkas unduhan (`Content-Disposition: attachment`) berisi data, transaksi, dan riwayat akses. Dicatat di audit log.
+
+### `POST /api/data-saya/hapus`
+
+Mengajukan permintaan hapus. Jawaban 201: `{ "id", "permintaan_hapus": { "id", "subjek", "diajukan_peran", "diajukan_pada", "status": "menunggu", "diproses_pada": null } }`. Bila masih ada yang menunggu: 409.
+
+## Hak mustahik lewat amil
+
+### `GET /api/mustahik/:id/ekspor?format=json|csv`
+
+Amil, hanya untuk mustahik aktif di wilayahnya (lainnya 404). Isi sama dengan ekspor pemilik data.
+
+### `POST /api/mustahik/:id/hapus`
+
+Amil mengajukan permintaan hapus atas nama mustahik di wilayahnya. Jawaban 201, atau 409 bila masih ada yang menunggu.
+
+## Permintaan hapus (admin)
+
+### `GET /api/permintaan`
+
+`{ "permintaan": [ { "id", "subjek": { "jenis", "id" }, "diajukan_peran", "diajukan_pada", "status", "diproses_pada" } ] }`. Tanpa nama.
+
+### `POST /api/permintaan/:id/proses`
+
+Badan: `{ "keputusan": "setujui" | "tolak" }`. Setujui: identitas dihapus atau dianonimkan dan kunci data dimusnahkan; catatan keuangan tetap ada tanpa identitas. Permintaan yang sudah diproses: 409.
 
 ## Audit log
 
