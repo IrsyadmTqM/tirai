@@ -6,6 +6,8 @@ import { catat, riwayatSubjek } from '../audit.js';
 import { wajib } from '../keamanan/middleware.js';
 import { bacaDataPribadi, kirimEkspor, paketEkspor, subjekDariPengguna } from '../layanan/data-pribadi.js';
 import { ajukanHapus, daftarPermintaan, permintaanTerakhir, prosesPermintaan } from '../layanan/penghapusan.js';
+import { TUJUAN, adaPersetujuan, bacaPersetujuan, ubahPersetujuan } from '../layanan/persetujuan.js';
+import { ubahKontak } from '../data/orang.js';
 import * as v from '../validasi.js';
 
 export function ruteDataSaya({ db, brankas }) {
@@ -53,6 +55,40 @@ export function ruteDataSaya({ db, brankas }) {
     const id = ajukanHapus(db, { subjek, diajukanPeran: 'pemilik' });
     catat(db, { pengguna: req.pengguna, aksi: 'buat', objek: 'permintaan', subjek });
     res.status(201).json({ permintaan_hapus: permintaanTerakhir(db, subjek), id });
+  });
+
+  // Persetujuan hanya berlaku untuk donatur (lihat docs/arsitektur.md).
+  const donaturSaya = (req) => {
+    const subjek = subjekSaya(req);
+    if (subjek.jenis !== 'donatur') throw new v.GalatPermintaan('Persetujuan hanya untuk akun donatur', 404);
+    return subjek;
+  };
+
+  r.get('/data-saya/persetujuan', wajib('persetujuan:kelola'), (req, res) => {
+    const subjek = donaturSaya(req);
+    res.json({ persetujuan: bacaPersetujuan(db, subjek.id) });
+  });
+
+  r.put('/data-saya/persetujuan/:tujuan', wajib('persetujuan:kelola'), (req, res) => {
+    const subjek = donaturSaya(req);
+    const tujuan = v.pilihan(req.params.tujuan, 'Tujuan', TUJUAN);
+    if (typeof req.body?.diberikan !== 'boolean') throw new v.GalatPermintaan('diberikan harus true atau false');
+    const akibat = ubahPersetujuan(db, subjek.id, tujuan, req.body.diberikan);
+    catat(db, { pengguna: req.pengguna, aksi: 'ubah', objek: 'persetujuan', subjek });
+    if (akibat.includes('kontak_dihapus')) catat(db, { pengguna: req.pengguna, aksi: 'hapus', objek: 'donatur', subjek });
+    res.json({ persetujuan: bacaPersetujuan(db, subjek.id), akibat });
+  });
+
+  // Mengisi atau mengganti kontak. Hanya bila izin kontak diberikan.
+  r.put('/data-saya/kontak', wajib('persetujuan:kelola'), (req, res) => {
+    const subjek = donaturSaya(req);
+    if (!adaPersetujuan(db, subjek.id, 'kontak_bukti')) {
+      throw new v.GalatPermintaan('Berikan dulu izin menyimpan kontak', 422);
+    }
+    const kontak = v.teks(req.body?.kontak, 'Kontak', { min: 5, maks: 100 });
+    ubahKontak(db, brankas, subjek.id, kontak);
+    catat(db, { pengguna: req.pengguna, aksi: 'ubah', objek: 'donatur', subjek });
+    res.json({ ok: true });
   });
 
   // Admin: daftar permintaan hapus. Orang dirujuk dengan nomor saja.

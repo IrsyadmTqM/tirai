@@ -173,3 +173,22 @@ Dasbor peran lain:
 
 Setiap aksi memunculkan konfirmasi singkat di bawah layar (`role="status"`), dan aksi yang tidak bisa dibatalkan (hapus) meminta konfirmasi dua langkah.
 
+## Persetujuan (langkah 7)
+
+Tabel `persetujuan` menyimpan izin donatur per tujuan. Donatur melihat dan mengubahnya di dasbor Data saya. Setiap tujuan punya akibat nyata di aplikasi, bukan sekadar catatan:
+
+| Tujuan | Bila diberikan | Bila dicabut |
+| --- | --- | --- |
+| `kontak_bukti`: simpan kontak untuk bukti donasi | Donatur bisa mengisi kontak (disimpan terenkripsi) | Kontak langsung dihapus dari database; mengisi kontak ditolak |
+| `nama_di_catatan`: tampilkan nama di catatan donasi bendahara | Bendahara melihat nama pada catatan donasi | Nama tidak dikirim ke bendahara (donasi tampil tanpa nama), donatur hilang dari pilihan saat mencatat donasi baru, dan membaca catatan donasi tidak lagi tercatat sebagai akses atas data donatur itu |
+
+- Perubahan izin dicatat di audit log (`ubah persetujuan`), dan penghapusan kontak akibat pencabutan dicatat terpisah (`hapus donatur`).
+- `diubah_pada` menjadi bukti kapan izin terakhir diubah. Status izin ikut dalam berkas ekspor.
+- Nominal donasi tetap tercatat apa pun status izinnya, karena dibutuhkan untuk pembukuan.
+- Data sintetis memuat satu donatur yang mencabut izin nama, supaya akibatnya terlihat di dasbor bendahara.
+
+Batasan dan hal terbuka:
+
+- Persetujuan baru dibuat untuk donatur. Data mustahik dikumpulkan untuk menyalurkan bantuan, dan dasar pemrosesannya (persetujuan atau kewajiban lain) perlu dibahas tim dan dosen. Pasal UU No. 27 Tahun 2022 yang relevan perlu dicek ke naskah aslinya sebelum dikutip [VERIFIKASI].
+- Analogi QS. An-Nur: 27 (meminta izin sebelum masuk) di CLAUDE.md hanya analogi, bukan dalil langsung [VERIFIKASI].
+

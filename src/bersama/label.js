@@ -26,6 +26,21 @@ export const LABEL_ASNAF = {
   ibnu_sabil: 'Ibnu sabil',
 };
 
+// Tujuan penggunaan data yang butuh persetujuan donatur. Setiap tujuan
+// punya akibat nyata di aplikasi bila dicabut (lihat uraian).
+export const TUJUAN_PERSETUJUAN = {
+  kontak_bukti: {
+    judul: 'Simpan kontak untuk bukti donasi',
+    uraian:
+      'Kontak Anda disimpan terenkripsi dan hanya dipakai untuk mengirim bukti donasi. Bila izin dicabut, kontak langsung dihapus dari database.',
+  },
+  nama_di_catatan: {
+    judul: 'Tampilkan nama saya di catatan donasi bendahara',
+    uraian:
+      'Bendahara melihat nama Anda pada catatan donasi sebagai bukti. Bila izin dicabut, donasi Anda tampil sebagai "tanpa nama" bagi bendahara; nominalnya tetap tercatat.',
+  },
+};
+
 export const LABEL_AKSI = {
   baca: 'membaca',
   buat: 'membuat',

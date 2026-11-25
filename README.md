@@ -8,7 +8,7 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 6 (dasbor Data saya dan dasbor tiap peran) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Langkah 7 (persetujuan) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
 
 ## Kebutuhan
 
@@ -121,7 +121,7 @@ Beranda menampilkan buku kas peragaan: pengunjung memilih peran dan melihat data
 4. Audit log append-only (selesai)
 5. Beranda buku kas interaktif (selesai)
 6. Dasbor "Data saya": lihat, riwayat akses, ekspor, hapus (selesai)
-7. Consent
+7. Consent (selesai)
 8. E2EE terbatas (opsional)
 
 ## Lisensi

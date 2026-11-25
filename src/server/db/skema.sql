@@ -103,6 +103,16 @@ CREATE TABLE sesi (
   kedaluwarsa_pada  TEXT NOT NULL
 ) STRICT;
 
+-- Persetujuan donatur per tujuan penggunaan data. Setiap baris bisa
+-- diberikan dan dicabut kapan saja oleh donatur sendiri.
+CREATE TABLE persetujuan (
+  donatur_id   INTEGER NOT NULL REFERENCES donatur(id),
+  tujuan       TEXT NOT NULL CHECK (tujuan IN ('kontak_bukti', 'nama_di_catatan')),
+  diberikan    INTEGER NOT NULL CHECK (diberikan IN (0, 1)),
+  diubah_pada  TEXT NOT NULL,
+  PRIMARY KEY (donatur_id, tujuan)
+) STRICT;
+
 -- Permintaan hapus data pribadi. Diajukan pemilik data (atau amil atas
 -- nama mustahik), diproses admin. Orang dirujuk lewat nomor; admin tidak
 -- melihat nama. Tanpa kolom alasan teks bebas, supaya tidak ada data pribadi
