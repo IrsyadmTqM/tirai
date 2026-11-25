@@ -1,0 +1,37 @@
+
+> tirai@1.0.0 test
+> vitest run --reporter=verbose
+
+
+ RUN  v5.1.2 /home/user/tirai
+
+ ✓ tests/database.test.js > skema dan minimisasi data > membuat tepat tabel yang tercatat di inventaris 2ms
+ ✓ tests/database.test.js > skema dan minimisasi data > semua tabel STRICT, sehingga tipe kolom ditegakkan 1ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel wilayah punya alasan tertulis 1ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel donatur punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel mustahik punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel pengguna punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel donasi punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel penyaluran punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > tidak ada kolom untuk data yang sengaja tidak dikumpulkan 1ms
+ ✓ tests/health.test.js > kerangka server > GET /api/health menjawab ok 41ms
+ ✓ tests/health.test.js > kerangka server > endpoint API yang tidak ada menjawab 404 14ms
+ ✓ tests/health.test.js > kerangka server > tidak membocorkan header X-Powered-By 3ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak mustahik di wilayah yang tidak ada (foreign key) 2ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak asnaf di luar delapan kategori 0ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak nominal nol atau negatif 0ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak teks di kolom angka (STRICT) 0ms
+ ✓ tests/database.test.js > batasan integritas di database > amil wajib punya wilayah, peran lain tidak boleh 0ms
+ ✓ tests/database.test.js > batasan integritas di database > akun pemilik data wajib tertaut ke tepat satu donatur atau mustahik 1ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak penanda NIK yang sama untuk dua mustahik (cegah penerima ganda) 0ms
+ ✓ tests/database.test.js > data sintetis > jumlah baris sesuai data sumber 1ms
+ ✓ tests/database.test.js > data sintetis > kontak donatur hanya memakai domain .test yang dicadangkan 1ms
+ ✓ tests/database.test.js > data sintetis > ada akun untuk setiap peran 0ms
+ ✓ tests/database.test.js > data sintetis > kata sandi tidak disimpan dalam bentuk asli 601ms
+ ✓ tests/database.test.js > data sintetis > penyaluran tiap jenis dana tidak melebihi dana yang masuk 1ms
+
+ Test Files  2 passed (2)
+      Tests  24 passed (24)
+   Start at  18:29:20
+   Duration  2.11s (tests 92%, import 6%, transform 1%)
+

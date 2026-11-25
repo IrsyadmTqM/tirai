@@ -16,5 +16,7 @@ export default defineConfig({
   test: {
     root: import.meta.dirname,
     include: ['tests/**/*.test.js'],
+    // node:sqlite masih berlabel eksperimental di Node 22; sembunyikan peringatannya.
+    execArgv: ['--disable-warning=ExperimentalWarning'],
   },
 });
