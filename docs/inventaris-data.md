@@ -50,6 +50,14 @@ enkripsi kolom mulai langkah 3.
 | `mustahik_id` | Menautkan akun pemilik data ke data mustahiknya, bila mustahik punya akun | RBAC |
 | `dibuat_pada` | Dasar menghitung masa simpan data | RBAC |
 
+## sesi
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `token_hash` | Mengenali pengguna yang sudah masuk | Hanya hash SHA-256, token asli hanya di cookie HttpOnly |
+| `pengguna_id` | Pemilik sesi | Tidak dikirim ke browser |
+| `kedaluwarsa_pada` | Sesi berakhir otomatis setelah 8 jam | - |
+
 ## donasi
 
 | Kolom | Alasan | Perlindungan |

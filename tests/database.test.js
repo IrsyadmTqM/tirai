@@ -132,6 +132,7 @@ describe('data sintetis', () => {
       donatur: data.DONATUR.length,
       mustahik: data.MUSTAHIK.length,
       pengguna: data.PENGGUNA.length,
+      sesi: 0,
       donasi: data.DONASI.length,
       penyaluran: data.PENYALURAN.length,
     });

@@ -5,6 +5,10 @@
 -- Langkah 1: kolom sensitif masih teks biasa. Mulai langkah 3, kolom yang
 -- ditandai [ENKRIPSI] disimpan sebagai ciphertext AES-256-GCM.
 -- Semua data yang diisi ke tabel ini sintetis.
+--
+-- Tabel donatur, mustahik, dan pengguna memakai AUTOINCREMENT supaya nomor
+-- yang pernah dipakai tidak diberikan lagi ke orang lain. Audit log merujuk
+-- orang lewat nomor ini, jadi nomor tidak boleh berpindah pemilik.
 
 CREATE TABLE wilayah (
   id    INTEGER PRIMARY KEY,
@@ -12,14 +16,14 @@ CREATE TABLE wilayah (
 ) STRICT;
 
 CREATE TABLE donatur (
-  id           INTEGER PRIMARY KEY,
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
   nama         TEXT NOT NULL,
   kontak       TEXT,                 -- opsional [ENKRIPSI]
   dibuat_pada  TEXT NOT NULL
 ) STRICT;
 
 CREATE TABLE mustahik (
-  id           INTEGER PRIMARY KEY,
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
   nama         TEXT NOT NULL,        -- [ENKRIPSI]
   alamat       TEXT NOT NULL,        -- [ENKRIPSI]
   kondisi      TEXT,                 -- catatan singkat [ENKRIPSI]
@@ -32,7 +36,7 @@ CREATE TABLE mustahik (
 ) STRICT;
 
 CREATE TABLE pengguna (
-  id               INTEGER PRIMARY KEY,
+  id               INTEGER PRIMARY KEY AUTOINCREMENT,
   nama_pengguna    TEXT NOT NULL UNIQUE,
   kata_sandi_hash  TEXT NOT NULL,
   peran            TEXT NOT NULL CHECK (peran IN ('admin', 'bendahara', 'amil', 'pemilik')),
@@ -69,6 +73,14 @@ CREATE TABLE penyaluran (
   tanggal       TEXT NOT NULL,
   dicatat_oleh  INTEGER NOT NULL REFERENCES pengguna(id),
   dibuat_pada   TEXT NOT NULL
+) STRICT;
+
+-- Sesi masuk. Yang disimpan hanya hash SHA-256 dari token; token aslinya
+-- hanya ada di cookie browser. Bocornya database tidak membocorkan sesi.
+CREATE TABLE sesi (
+  token_hash        TEXT PRIMARY KEY,
+  pengguna_id       INTEGER NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
+  kedaluwarsa_pada  TEXT NOT NULL
 ) STRICT;
 
 CREATE INDEX idx_mustahik_wilayah ON mustahik(wilayah_id);

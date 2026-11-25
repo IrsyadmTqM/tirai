@@ -89,6 +89,18 @@ export const INVENTARIS = {
     },
   },
 
+  sesi: {
+    token_hash: {
+      alasan: 'Mengenali pengguna yang sudah masuk',
+      perlindungan: 'Hanya hash SHA-256, token asli hanya di cookie HttpOnly',
+    },
+    pengguna_id: { alasan: 'Pemilik sesi', perlindungan: 'Tidak dikirim ke browser' },
+    kedaluwarsa_pada: {
+      alasan: 'Sesi berakhir otomatis setelah 8 jam',
+      perlindungan: '-',
+    },
+  },
+
   donasi: {
     id: { alasan: 'Penanda baris', perlindungan: '-' },
     donatur_id: {
