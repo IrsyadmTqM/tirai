@@ -48,6 +48,14 @@ export const ENDPOINT = [
     boleh: ['pemilik'],
   },
   { metode: 'put', jalur: '/api/data-saya/kontak', body: { kontak: 'baru@contoh.test' }, boleh: ['pemilik'] },
+  { metode: 'get', jalur: '/api/data-saya/catatan', boleh: ['pemilik'] },
+  {
+    metode: 'put',
+    jalur: '/api/data-saya/catatan',
+    body: { isi: 'QUJDREVGR0hJSktMTU5PUFFSU1RVVldY', iv: 'AAAAAAAAAAAAAAAA', salt: 'AAAAAAAAAAAAAAAAAAAAAAAA', iterasi: 600000 },
+    boleh: ['pemilik'],
+  },
+  { metode: 'delete', jalur: '/api/data-saya/catatan', boleh: ['pemilik'] },
   { metode: 'post', jalur: '/api/data-saya/hapus', boleh: ['pemilik'] },
   { metode: 'get', jalur: '/api/permintaan', boleh: ['admin'] },
   // Permintaan nomor 1 dibuat oleh baris di atas; ditolak supaya akun uji tetap ada.

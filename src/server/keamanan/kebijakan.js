@@ -24,7 +24,7 @@ export const HAK_PERAN = {
     'mustahik:ekspor_wilayah',
     'mustahik:hapus_wilayah',
   ],
-  pemilik: ['data_saya:baca', 'data_saya:ekspor', 'data_saya:hapus', 'persetujuan:kelola'],
+  pemilik: ['data_saya:baca', 'data_saya:ekspor', 'data_saya:hapus', 'persetujuan:kelola', 'catatan:kelola'],
 };
 
 export function boleh(peran, hak) {

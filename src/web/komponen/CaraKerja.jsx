@@ -4,43 +4,14 @@
 // keadaan akhir.
 
 import { motion, useInView, useReducedMotion, useScroll } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { KURVA } from '../lib/gerak.js';
 import SelTirai from './SelTirai.jsx';
+import TeksTeracak from './TeksTeracak.jsx';
 
 const ALAMAT = 'Jl. Kenanga No. 12, RT 02/RW 01';
 // Contoh bentuk ciphertext seperti yang tersimpan di database (ilustrasi).
 const SANDI = 'v1:jQHq1awJAFIP1m5QTAJqTDWPIVt7lpVr4nvu';
-const BASE64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-function TeksTeracak({ dari, ke, jalan }) {
-  const [teks, setTeks] = useState(dari);
-  const hemat = useReducedMotion();
-
-  useEffect(() => {
-    if (!jalan) return undefined;
-    if (hemat) {
-      setTeks(ke);
-      return undefined;
-    }
-    let langkah = 0;
-    const total = 26;
-    const id = setInterval(() => {
-      langkah += 1;
-      const tetap = Math.floor((langkah / total) * ke.length);
-      let acak = '';
-      for (let i = tetap; i < ke.length; i++) acak += BASE64[Math.floor(Math.random() * BASE64.length)];
-      setTeks(ke.slice(0, tetap) + acak);
-      if (langkah >= total) {
-        clearInterval(id);
-        setTeks(ke);
-      }
-    }, 38);
-    return () => clearInterval(id);
-  }, [jalan, hemat, ke]);
-
-  return <code className="teks-sandi">{teks}</code>;
-}
 
 function VisualMinimal({ jalan }) {
   const baris = [

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { LABEL_AKSI, LABEL_JENIS, LABEL_OBJEK, NAMA_PERAN } from '../../bersama/label.js';
 import AngkaBerputar from '../komponen/AngkaBerputar.jsx';
+import CatatanPribadi from '../komponen/CatatanPribadi.jsx';
 import { useBeriTahu } from '../komponen/Pemberitahuan.jsx';
 import { api } from '../lib/api.js';
 import { rupiah, tanggal, waktu } from '../lib/format.js';
@@ -214,6 +215,11 @@ export default function DasborPemilik() {
             </ul>
           </section>
         )}
+
+        <section className="lembar" aria-labelledby="judul-catatan">
+          <h2 id="judul-catatan">Catatan pribadi</h2>
+          <CatatanPribadi onBerubah={() => muatRiwayat().catch(() => {})} />
+        </section>
 
         <section className="lembar lembar-peringatan" aria-labelledby="judul-hapus">
           <h2 id="judul-hapus">Hapus data saya</h2>

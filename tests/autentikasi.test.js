@@ -102,6 +102,21 @@ describe('perlindungan web dasar', () => {
     expect(JSON.stringify(res.body)).not.toMatch(/at |node_modules|SyntaxError/);
   });
 
+  it('isian berisi skrip (XSS tersimpan) dikembalikan sebagai teks JSON, bukan HTML', async () => {
+    const amil = await masukSebagai(app, 'amil-rw01');
+    const muatan = '<script>alert(1)</script>';
+    const res = await amil
+      .post('/api/mustahik')
+      .send({ nama: muatan, alamat: '<img src=x onerror=alert(1)>', asnaf: 'miskin', nik: '0000000000004444' });
+    expect(res.status).toBe(201);
+    const daftar = await amil.get('/api/mustahik');
+    expect(daftar.headers['content-type']).toMatch(/application\/json/);
+    expect(daftar.body.mustahik.find((m) => m.id === res.body.id).nama).toBe(muatan);
+    // Lapisan di browser: React menampilkan string sebagai teks, dan CSP
+    // default-src 'self' menolak skrip sisipan.
+    expect(daftar.headers['content-security-policy']).toMatch(/default-src 'self'/);
+  });
+
   it('upaya SQL injection lewat nama pengguna tidak membuka akses', async () => {
     const res = await request(app)
       .post('/api/masuk')

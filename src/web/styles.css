@@ -1035,6 +1035,20 @@ textarea {
   flex: 1 1 220px;
 }
 
+/* Catatan pribadi */
+
+.catatan-pribadi textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.bukti-kirim {
+  background: var(--latar);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--biru-tinta);
+}
+
 /* Pemberitahuan singkat */
 
 .pemberitahuan-wadah {

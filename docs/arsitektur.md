@@ -192,3 +192,27 @@ Batasan dan hal terbuka:
 - Persetujuan baru dibuat untuk donatur. Data mustahik dikumpulkan untuk menyalurkan bantuan, dan dasar pemrosesannya (persetujuan atau kewajiban lain) perlu dibahas tim dan dosen. Pasal UU No. 27 Tahun 2022 yang relevan perlu dicek ke naskah aslinya sebelum dikutip [VERIFIKASI].
 - Analogi QS. An-Nur: 27 (meminta izin sebelum masuk) di CLAUDE.md hanya analogi, bukan dalil langsung [VERIFIKASI].
 
+## E2EE terbatas: catatan pribadi (langkah 8)
+
+Aplikasi ini secara keseluruhan bukan E2EE: server perlu membaca data untuk menyaring akses menurut peran (RBAC). Satu fitur dibuat E2EE terbatas, yaitu catatan pribadi donatur (misalnya perhitungan zakat mal, yang memuat rincian harta).
+
+```
+Browser donatur                                     Server
+kata sandi catatan --PBKDF2-SHA256, 600.000 iterasi--> kunci AES-256 (tidak bisa diekspor)
+teks catatan --AES-256-GCM, IV acak--> ciphertext  --PUT /api/data-saya/catatan-->  disimpan apa adanya
+```
+
+- Kode: [`src/web/lib/catatan-e2ee.js`](../src/web/lib/catatan-e2ee.js), memakai Web Crypto API bawaan browser.
+- Kata sandi catatan terpisah dari kata sandi masuk dan tidak pernah dikirim ke server. Server menyimpan isi terenkripsi, IV, salt, dan jumlah iterasi. Tidak ada kode di server yang bisa membukanya.
+- Dibuktikan dua cara: tes otomatis memakai modul browser yang sama di Node.js, dan pemeriksaan Playwright yang menangkap badan permintaan di browser. Keduanya tidak menemukan teks catatan maupun kata sandi catatan.
+- Catatan ikut dalam berkas ekspor dalam bentuk terenkripsi, dan ikut terhapus bila data donatur dihapus.
+- Angka 600.000 iterasi mengikuti OWASP Password Storage Cheat Sheet untuk PBKDF2-HMAC-SHA256. Cek ulang ke sumbernya sebelum dikutip.
+
+Batasan yang perlu ditulis jujur di laporan:
+
+- Kode JavaScript pengenkripsi dikirim oleh server yang sama. Server yang dikuasai penyerang bisa mengirim kode yang mencuri kata sandi catatan. Inilah alasan disebut E2EE terbatas.
+- Server tetap tahu kapan catatan disimpan, siapa pemiliknya, dan kira-kira berapa panjangnya.
+- Kekuatannya bergantung pada kata sandi catatan. Batas minimal 8 karakter hanya diperiksa di browser.
+- Kata sandi catatan yang lupa tidak bisa dipulihkan oleh siapa pun.
+- Web Crypto hanya tersedia di konteks aman (HTTPS atau localhost).
+

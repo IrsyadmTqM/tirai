@@ -92,6 +92,17 @@ export function bacaDataPribadi(db, brankas, subjek) {
   };
 }
 
+function catatanTerenkripsi(db, subjek) {
+  const kolom = subjek.jenis === 'donatur' ? 'donatur_id' : 'mustahik_id';
+  const baris = db
+    .prepare(
+      `SELECT c.isi, c.iv, c.salt, c.iterasi, c.diubah_pada FROM catatan_rahasia c
+       JOIN pengguna p ON p.id = c.pengguna_id WHERE p.${kolom} = ?`,
+    )
+    .get(subjek.id);
+  return baris ? { ...baris } : null;
+}
+
 // Paket ekspor: data, transaksi, dan riwayat akses.
 export function paketEkspor(db, brankas, subjek) {
   const isi = bacaDataPribadi(db, brankas, subjek);
@@ -109,6 +120,9 @@ export function paketEkspor(db, brankas, subjek) {
             diubah_pada,
           }))
         : [],
+    // Catatan pribadi ikut dalam bentuk terenkripsi; hanya pemiliknya yang
+    // bisa membukanya dengan kata sandi catatan.
+    catatan_pribadi_terenkripsi: catatanTerenkripsi(db, subjek),
     riwayat_akses: riwayatSubjek(db, subjek.jenis, subjek.id).map(({ waktu, peran, aksi, objek, saluran }) => ({
       waktu,
       peran,

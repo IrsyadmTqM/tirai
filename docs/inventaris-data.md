@@ -78,6 +78,17 @@ enkripsi kolom mulai langkah 3.
 | `diberikan` | Status izin: diberikan atau dicabut | RBAC |
 | `diubah_pada` | Kapan izin terakhir diubah, sebagai bukti persetujuan | - |
 
+## catatan_rahasia
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `pengguna_id` | Pemilik catatan | RBAC: hanya pemiliknya |
+| `isi` | Catatan pribadi pilihan pemilik data (misalnya perhitungan zakat mal) | Dienkripsi di browser (AES-256-GCM); server tidak punya kuncinya |
+| `iv` | Diperlukan browser untuk membuka catatan | Bukan rahasia |
+| `salt` | Diperlukan browser untuk menurunkan kunci dari kata sandi catatan | Bukan rahasia |
+| `iterasi` | Jumlah iterasi PBKDF2 yang dipakai saat mengunci | Bukan rahasia |
+| `diubah_pada` | Kapan catatan terakhir disimpan | - |
+
 ## permintaan_hapus
 
 | Kolom | Alasan | Perlindungan |

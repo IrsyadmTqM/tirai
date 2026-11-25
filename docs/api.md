@@ -43,6 +43,9 @@ Diuji otomatis di `tests/rbac.test.js` (daftar di `tests/matriks-rbac.js`).
 | `GET /api/data-saya/persetujuan` | tidak | tidak | tidak | milik sendiri (donatur) |
 | `PUT /api/data-saya/persetujuan/:tujuan` | tidak | tidak | tidak | milik sendiri (donatur) |
 | `PUT /api/data-saya/kontak` | tidak | tidak | tidak | milik sendiri (donatur) |
+| `GET /api/data-saya/catatan` | tidak | tidak | tidak | milik sendiri |
+| `PUT /api/data-saya/catatan` | tidak | tidak | tidak | milik sendiri |
+| `DELETE /api/data-saya/catatan` | tidak | tidak | tidak | milik sendiri |
 | `GET /api/permintaan` | ya | tidak | tidak | tidak |
 | `POST /api/permintaan/:id/proses` | ya | tidak | tidak | tidak |
 
@@ -163,6 +166,18 @@ Badan: `{ "diberikan": true | false }`. Jawaban: `{ "persetujuan": [...], "akiba
 ### `PUT /api/data-saya/kontak`
 
 Badan: `{ "kontak": "nama@contoh.test" }`. Hanya bila izin `kontak_bukti` diberikan (selain itu 422). Disimpan terenkripsi.
+
+### `GET /api/data-saya/catatan`
+
+`{ "catatan": null }` atau `{ "catatan": { "isi", "iv", "salt", "iterasi", "diubah_pada" } }`. Semua berupa ciphertext dan parameter untuk membukanya di browser.
+
+### `PUT /api/data-saya/catatan`
+
+Badan: `{ "isi": "<base64 ciphertext AES-GCM>", "iv": "<base64 12 byte>", "salt": "<base64 16 byte>", "iterasi": 600000 }`. Dienkripsi di browser oleh `src/web/lib/catatan-e2ee.js`. Server hanya memeriksa format dan panjang.
+
+### `DELETE /api/data-saya/catatan`
+
+Menghapus catatan. Jawaban 204.
 
 ## Hak mustahik lewat amil
 
