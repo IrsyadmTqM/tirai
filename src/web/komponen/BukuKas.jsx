@@ -18,6 +18,8 @@ export const JUDUL_KOLOM = {
   nominal: 'Nominal (Rp)',
 };
 
+const IDENTITAS = ['nama', 'alamat', 'kondisi'];
+
 export function isiSel(kolom, nilai) {
   if (nilai === null || nilai === undefined) return '–';
   switch (kolom) {
@@ -54,7 +56,11 @@ export default function BukuKas({ data, keterangan }) {
             <tr key={b.id}>
               {data.kolom.map((k, j) => (
                 <td key={k} className={`kolom-${k}`}>
-                  <SelTirai tertutup={b.tertutup.includes(k)} isi={isiSel(k, b[k])} jeda={i * 0.018 + j * 0.03} />
+                  <SelTirai
+                    tertutup={b.tertutup.includes(k)}
+                    isi={b.dianonimkan && IDENTITAS.includes(k) ? 'dihapus atas permintaan' : isiSel(k, b[k])}
+                    jeda={i * 0.018 + j * 0.03}
+                  />
                 </td>
               ))}
             </tr>

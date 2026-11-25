@@ -6,10 +6,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../lib/api.js';
 import { KURVA } from '../lib/gerak.js';
-import AngkaBerputar from './AngkaBerputar.jsx';
 import BukuKas from './BukuKas.jsx';
 import { kalimatAudit } from './DaftarAudit.jsx';
-import SelTirai from './SelTirai.jsx';
+import RingkasanDana from './RingkasanDana.jsx';
 
 const PILIHAN = [
   {
@@ -53,7 +52,6 @@ export default function BukuKasPeragaan() {
   }, [peran]);
 
   const pilihan = PILIHAN.find((p) => p.peran === peran);
-  const r = data?.ringkasan;
 
   return (
     <section className="peragaan" aria-labelledby="judul-buku-kas">
@@ -95,21 +93,7 @@ export default function BukuKasPeragaan() {
           </motion.p>
         </AnimatePresence>
 
-        <dl className="ringkasan-dana">
-          {[
-            ['Dana masuk', r?.total.masuk],
-            ['Disalurkan', r?.total.keluar],
-            ['Saldo', r?.total.saldo],
-          ].map(([label, nilai]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>
-                <span className="mata-uang">Rp</span>{' '}
-                {data && nilai !== undefined ? <AngkaBerputar nilai={nilai} /> : <SelTirai tertutup isi={null} />}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <RingkasanDana ringkasan={data ? data.ringkasan : null} />
 
         {galat && <p className="pesan-galat">{galat}</p>}
         <p className="keterangan petunjuk-geser" aria-hidden="true">

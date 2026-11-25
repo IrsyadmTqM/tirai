@@ -67,13 +67,17 @@ describe('batasan integritas di database', () => {
   });
 
   const waktu = data.AWAL_DATA;
-  const tambahMustahik = (wilayah, asnaf = 'miskin', nik = null) =>
-    db
+  const tambahMustahik = (wilayah, asnaf = 'miskin', nik = null) => {
+    const kunci = db
+      .prepare("INSERT INTO kunci_data (kunci_terbungkus, dibuat_pada) VALUES ('v1:uji', ?)")
+      .run(waktu).lastInsertRowid;
+    return db
       .prepare(
-        `INSERT INTO mustahik (nama, alamat, asnaf, wilayah_id, nik_hmac, dibuat_pada)
-         VALUES ('v1:uji', 'v1:uji', ?, ?, ?, ?)`,
+        `INSERT INTO mustahik (nama, alamat, asnaf, wilayah_id, nik_hmac, kunci_id, dibuat_pada)
+         VALUES ('v1:uji', 'v1:uji', ?, ?, ?, ?, ?)`,
       )
-      .run(asnaf, wilayah, nik, waktu);
+      .run(asnaf, wilayah, nik, kunci, waktu);
+  };
   const tambahPengguna = (nama, peran, { wilayah = null, donatur = null, mustahik = null } = {}) =>
     db
       .prepare(
@@ -136,6 +140,7 @@ describe('data sintetis', () => {
       kunci_data: data.DONATUR.length + data.MUSTAHIK.length,
       pengguna: data.PENGGUNA.length,
       sesi: 0,
+      permintaan_hapus: 0,
       audit_log: 0,
       donasi: data.DONASI.length,
       penyaluran: data.PENYALURAN.length,

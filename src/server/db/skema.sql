@@ -32,18 +32,27 @@ CREATE TABLE donatur (
   dibuat_pada  TEXT NOT NULL
 ) STRICT;
 
+-- Mustahik yang datanya dihapus atas permintaan tetap tersisa sebagai baris
+-- tanpa identitas (asnaf dan wilayah saja), karena catatan penyaluran zakat
+-- wajib tetap ada untuk pembukuan. Kunci datanya dimusnahkan.
 CREATE TABLE mustahik (
-  id           INTEGER PRIMARY KEY AUTOINCREMENT,
-  nama         TEXT NOT NULL CHECK (nama LIKE 'v1:%'),                 -- [ENKRIPSI]
-  alamat       TEXT NOT NULL CHECK (alamat LIKE 'v1:%'),               -- [ENKRIPSI]
-  kondisi      TEXT CHECK (kondisi IS NULL OR kondisi LIKE 'v1:%'),    -- catatan singkat [ENKRIPSI]
-  asnaf        TEXT NOT NULL CHECK (asnaf IN (
-                 'fakir', 'miskin', 'amil', 'mualaf',
-                 'riqab', 'gharim', 'fisabilillah', 'ibnu_sabil')),
-  wilayah_id   INTEGER NOT NULL REFERENCES wilayah(id),
-  nik_hmac     TEXT UNIQUE CHECK (nik_hmac IS NULL OR length(nik_hmac) = 64),  -- HMAC-SHA256, bukan NIK
-  kunci_id     INTEGER UNIQUE REFERENCES kunci_data(id),
-  dibuat_pada  TEXT NOT NULL
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  nama              TEXT CHECK (nama IS NULL OR nama LIKE 'v1:%'),            -- [ENKRIPSI]
+  alamat            TEXT CHECK (alamat IS NULL OR alamat LIKE 'v1:%'),        -- [ENKRIPSI]
+  kondisi           TEXT CHECK (kondisi IS NULL OR kondisi LIKE 'v1:%'),      -- catatan singkat [ENKRIPSI]
+  asnaf             TEXT NOT NULL CHECK (asnaf IN (
+                      'fakir', 'miskin', 'amil', 'mualaf',
+                      'riqab', 'gharim', 'fisabilillah', 'ibnu_sabil')),
+  wilayah_id        INTEGER NOT NULL REFERENCES wilayah(id),
+  nik_hmac          TEXT UNIQUE CHECK (nik_hmac IS NULL OR length(nik_hmac) = 64),  -- HMAC-SHA256, bukan NIK
+  kunci_id          INTEGER UNIQUE REFERENCES kunci_data(id),
+  dibuat_pada       TEXT NOT NULL,
+  dianonimkan_pada  TEXT,
+  -- Belum dianonimkan: nama, alamat, dan kunci wajib ada.
+  CHECK (dianonimkan_pada IS NOT NULL OR (nama IS NOT NULL AND alamat IS NOT NULL AND kunci_id IS NOT NULL)),
+  -- Sudah dianonimkan: semua identitas wajib kosong.
+  CHECK (dianonimkan_pada IS NULL OR
+         (nama IS NULL AND alamat IS NULL AND kondisi IS NULL AND nik_hmac IS NULL AND kunci_id IS NULL))
 ) STRICT;
 
 CREATE TABLE pengguna (
@@ -93,6 +102,25 @@ CREATE TABLE sesi (
   pengguna_id       INTEGER NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
   kedaluwarsa_pada  TEXT NOT NULL
 ) STRICT;
+
+-- Permintaan hapus data pribadi. Diajukan pemilik data (atau amil atas
+-- nama mustahik), diproses admin. Orang dirujuk lewat nomor; admin tidak
+-- melihat nama. Tanpa kolom alasan teks bebas, supaya tidak ada data pribadi
+-- yang ikut tertulis.
+CREATE TABLE permintaan_hapus (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  subjek_jenis    TEXT NOT NULL CHECK (subjek_jenis IN ('donatur', 'mustahik')),
+  subjek_id       INTEGER NOT NULL,
+  diajukan_peran  TEXT NOT NULL CHECK (diajukan_peran IN ('pemilik', 'amil')),
+  diajukan_pada   TEXT NOT NULL,
+  status          TEXT NOT NULL CHECK (status IN ('menunggu', 'disetujui', 'ditolak')),
+  diproses_pada   TEXT,
+  CHECK ((status = 'menunggu') = (diproses_pada IS NULL))
+) STRICT;
+
+-- Paling banyak satu permintaan yang masih menunggu untuk tiap orang.
+CREATE UNIQUE INDEX idx_permintaan_menunggu ON permintaan_hapus(subjek_jenis, subjek_id)
+  WHERE status = 'menunggu';
 
 -- Audit log: siapa, kapan, aksi apa, atas data siapa.
 -- - Hanya bisa ditambah. Trigger di bawah menolak UPDATE dan DELETE,

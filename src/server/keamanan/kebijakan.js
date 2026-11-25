@@ -7,7 +7,7 @@
 export const PERAN = ['admin', 'bendahara', 'amil', 'pemilik'];
 
 export const HAK_PERAN = {
-  admin: ['buku_kas:ringkas', 'ringkasan:baca', 'pengguna:kelola', 'audit:baca'],
+  admin: ['buku_kas:ringkas', 'ringkasan:baca', 'pengguna:kelola', 'audit:baca', 'permintaan:proses'],
   bendahara: [
     'buku_kas:baca',
     'ringkasan:baca',
@@ -17,8 +17,14 @@ export const HAK_PERAN = {
     'penyaluran:catat',
     'mustahik:baca_terbatas',
   ],
-  amil: ['buku_kas:wilayah', 'mustahik:baca_wilayah', 'mustahik:catat_wilayah'],
-  pemilik: [],
+  amil: [
+    'buku_kas:wilayah',
+    'mustahik:baca_wilayah',
+    'mustahik:catat_wilayah',
+    'mustahik:ekspor_wilayah',
+    'mustahik:hapus_wilayah',
+  ],
+  pemilik: ['data_saya:baca', 'data_saya:ekspor', 'data_saya:hapus'],
 };
 
 export function boleh(peran, hak) {
@@ -73,7 +79,8 @@ export function saringBukuKas(pengguna, semuaBaris, bukaNilai = (b, k) => b[k]) 
   const terbuka = new Set();
   const baris = semuaBaris.map((b) => {
     const terlihat = new Set(kolomTerlihat(pengguna, b));
-    const hasil = { id: b.id, tertutup: [] };
+    // Penerima yang datanya sudah dihapus: tidak ada identitas untuk dibuka.
+    const hasil = { id: b.id, dianonimkan: Boolean(b.dianonimkan_pada), tertutup: [] };
     for (const kolom of KOLOM_BUKU_KAS) {
       if (terlihat.has(kolom)) {
         hasil[kolom] = bukaNilai(b, kolom);
@@ -82,7 +89,7 @@ export function saringBukuKas(pengguna, semuaBaris, bukaNilai = (b, k) => b[k]) 
         hasil.tertutup.push(kolom);
       }
     }
-    if (['nama', 'alamat', 'kondisi'].some((k) => terlihat.has(k))) terbuka.add(b.mustahik_id);
+    if (!b.dianonimkan_pada && ['nama', 'alamat', 'kondisi'].some((k) => terlihat.has(k))) terbuka.add(b.mustahik_id);
     return hasil;
   });
   return { baris, terbuka: [...terbuka] };

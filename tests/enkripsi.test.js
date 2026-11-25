@@ -138,7 +138,10 @@ describe('isi database mentah', () => {
     const brankas = new Brankas(db, kunci);
     const { nama, kunci_id } = db.prepare('SELECT nama, kunci_id FROM mustahik WHERE id = 9').get();
     expect(brankas.dekripsi(kunci_id, nama, 'mustahik.nama')).toBe(MUSTAHIK[8].nama);
-    db.prepare('UPDATE mustahik SET kunci_id = NULL WHERE id = 9').run();
+    db.prepare(
+      `UPDATE mustahik SET nama = NULL, alamat = NULL, kondisi = NULL, nik_hmac = NULL, kunci_id = NULL,
+         dianonimkan_pada = '2026-11-25T00:00:00Z' WHERE id = 9`,
+    ).run();
     brankas.musnahkan(kunci_id);
     expect(() => brankas.dekripsi(kunci_id, nama, 'mustahik.nama')).toThrow(/dimusnahkan/);
   });

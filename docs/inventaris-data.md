@@ -45,6 +45,7 @@ enkripsi kolom mulai langkah 3.
 | `wilayah_id` | Membatasi akses amil hanya pada wilayahnya | RBAC |
 | `nik_hmac` | Mencegah penerima ganda tanpa menyimpan NIK utuh | HMAC berkunci, NIK asli tidak disimpan |
 | `kunci_id` | Menunjuk kunci data milik mustahik ini | Tidak dikirim ke browser |
+| `dianonimkan_pada` | Menandai data yang sudah dihapus atas permintaan, sementara catatan penyaluran tetap ada | - |
 | `dibuat_pada` | Dasar menghitung masa simpan data | RBAC |
 
 ## pengguna
@@ -67,6 +68,18 @@ enkripsi kolom mulai langkah 3.
 | `token_hash` | Mengenali pengguna yang sudah masuk | Hanya hash SHA-256, token asli hanya di cookie HttpOnly |
 | `pengguna_id` | Pemilik sesi | Tidak dikirim ke browser |
 | `kedaluwarsa_pada` | Sesi berakhir otomatis setelah 8 jam | - |
+
+## permintaan_hapus
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `id` | Penanda baris | - |
+| `subjek_jenis` | Jenis data yang diminta dihapus: donatur atau mustahik | Pilihan tetap |
+| `subjek_id` | Nomor orang yang datanya diminta dihapus | Nomor saja, admin tidak melihat nama |
+| `diajukan_peran` | Diajukan sendiri atau oleh amil atas nama mustahik | Pilihan tetap |
+| `diajukan_pada` | Kapan permintaan diajukan | - |
+| `status` | Menunggu, disetujui, atau ditolak | Pilihan tetap |
+| `diproses_pada` | Kapan permintaan diproses admin | - |
 
 ## audit_log
 

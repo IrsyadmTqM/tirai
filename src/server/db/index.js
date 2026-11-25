@@ -10,7 +10,7 @@ import * as data from './data-sintetis.js';
 
 const SKEMA = fs.readFileSync(new URL('./skema.sql', import.meta.url), 'utf8');
 
-export const TABEL = ['wilayah', 'kunci_data', 'donatur', 'mustahik', 'pengguna', 'sesi', 'audit_log', 'donasi', 'penyaluran'];
+export const TABEL = ['wilayah', 'kunci_data', 'donatur', 'mustahik', 'pengguna', 'sesi', 'permintaan_hapus', 'audit_log', 'donasi', 'penyaluran'];
 
 // Lokasi berkas database: DB_PATH dari .env, atau data/tirai.db di akar proyek.
 export function lokasiDatabase() {
