@@ -29,6 +29,10 @@ export const DONATUR = [
   { id: 8, nama: 'Laila Hasanah', kontak: null },
 ];
 
+// Donatur yang (dalam data sintetis) mencabut izin namanya tampil di
+// catatan donasi bendahara.
+export const NAMA_DICABUT = [8];
+
 export const MUSTAHIK = [
   // RW 01
   {

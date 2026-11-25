@@ -28,21 +28,67 @@ const STATUS = {
   ditolak: 'Ditolak admin',
 };
 
+function Sakelar({ aktif, onUbah, label, keterangan }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={aktif}
+      aria-label={label}
+      aria-describedby={keterangan}
+      className="sakelar"
+      onClick={() => onUbah(!aktif)}
+    >
+      <span className="sakelar-jalur" aria-hidden="true">
+        <span className="sakelar-tombol" />
+      </span>
+      <span className="sakelar-teks">{aktif ? 'Diizinkan' : 'Dicabut'}</span>
+    </button>
+  );
+}
+
 export default function DasborPemilik() {
   const [isi, setIsi] = useState(null);
+  const [persetujuan, setPersetujuan] = useState([]);
+  const [kontakBaru, setKontakBaru] = useState('');
   const [riwayat, setRiwayat] = useState([]);
   const [galat, setGalat] = useState('');
   const [konfirmasi, setKonfirmasi] = useState(false);
   const beriTahu = useBeriTahu();
 
   const muatRiwayat = useCallback(() => api('/data-saya/riwayat').then((d) => setRiwayat(d.riwayat)), []);
+  const muatData = useCallback(() => api('/data-saya').then(setIsi), []);
 
   useEffect(() => {
-    api('/data-saya')
-      .then(setIsi)
+    muatData()
+      .then(() => api('/data-saya/persetujuan').then((d) => setPersetujuan(d.persetujuan)))
       .then(muatRiwayat)
       .catch((e) => setGalat(e.message));
-  }, [muatRiwayat]);
+  }, [muatData, muatRiwayat]);
+
+  async function ubahIzin(p, diberikan) {
+    try {
+      const d = await api(`/data-saya/persetujuan/${p.tujuan}`, { metode: 'PUT', data: { diberikan } });
+      setPersetujuan(d.persetujuan);
+      if (d.akibat.includes('kontak_dihapus')) beriTahu('Izin dicabut. Kontak Anda sudah dihapus dari database.');
+      else beriTahu(diberikan ? 'Izin diberikan.' : 'Izin dicabut.');
+      await Promise.all([muatData(), muatRiwayat()]);
+    } catch (e) {
+      beriTahu(e.message, 'galat');
+    }
+  }
+
+  async function simpanKontak(e) {
+    e.preventDefault();
+    try {
+      await api('/data-saya/kontak', { metode: 'PUT', data: { kontak: kontakBaru } });
+      setKontakBaru('');
+      beriTahu('Kontak tersimpan terenkripsi.');
+      await Promise.all([muatData(), muatRiwayat()]);
+    } catch (err) {
+      beriTahu(err.message, 'galat');
+    }
+  }
 
   function unduh(format) {
     beriTahu(`Unduhan ${format.toUpperCase()} dimulai. Akses ini tercatat di riwayat.`);
@@ -129,6 +175,45 @@ export default function DasborPemilik() {
             </tfoot>
           </table>
         </section>
+
+        {persetujuan.length > 0 && (
+          <section className="lembar" aria-labelledby="judul-izin">
+            <h2 id="judul-izin">Izin penggunaan data</h2>
+            <p className="keterangan">Anda bisa memberi atau mencabut izin kapan saja. Akibatnya langsung berlaku.</p>
+            <ul className="daftar-izin">
+              {persetujuan.map((p) => (
+                <li key={p.tujuan}>
+                  <div>
+                    <h3>{p.judul}</h3>
+                    <p id={`izin-${p.tujuan}`} className="keterangan">
+                      {p.uraian}
+                      {p.diubah_pada && <> Terakhir diubah {waktu(p.diubah_pada)}.</>}
+                    </p>
+                    {p.tujuan === 'kontak_bukti' && p.diberikan && !isi.data.find((f) => f.kolom === 'kontak')?.nilai && (
+                      <form className="form-kontak" onSubmit={simpanKontak}>
+                        <label htmlFor="kontak-baru">Kontak (surel atau nomor telepon)</label>
+                        <div className="baris-tombol">
+                          <input
+                            id="kontak-baru"
+                            value={kontakBaru}
+                            onChange={(e) => setKontakBaru(e.target.value)}
+                            required
+                            minLength={5}
+                            maxLength={100}
+                          />
+                          <button type="submit" className="tombol tombol-garis">
+                            Simpan
+                          </button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                  <Sakelar aktif={p.diberikan} label={p.judul} keterangan={`izin-${p.tujuan}`} onUbah={(v) => ubahIzin(p, v)} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="lembar lembar-peringatan" aria-labelledby="judul-hapus">
           <h2 id="judul-hapus">Hapus data saya</h2>

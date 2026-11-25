@@ -7,6 +7,7 @@ import { daftarDonasi, hitungRingkasan, saldoJenis, tambahDonasi, tambahPenyalur
 import { adaDonatur, adaMustahik, daftarDonatur } from '../data/orang.js';
 import { wajib } from '../keamanan/middleware.js';
 import { catatAksesBukuKas, susunBukuKas } from '../layanan/buku-kas.js';
+import { adaPersetujuan } from '../layanan/persetujuan.js';
 import * as v from '../validasi.js';
 
 const NOMINAL_MAKS = 10_000_000_000;
@@ -59,6 +60,9 @@ export function ruteKeuangan({ db, brankas }) {
     const b = req.body ?? {};
     const donaturId = b.donatur_id === null || b.donatur_id === undefined ? null : v.bilanganBulat(b.donatur_id, 'Donatur');
     if (donaturId !== null && !adaDonatur(db, donaturId)) throw new v.GalatPermintaan('Donatur tidak ditemukan');
+    if (donaturId !== null && !adaPersetujuan(db, donaturId, 'nama_di_catatan')) {
+      throw new v.GalatPermintaan('Donatur ini tidak mengizinkan namanya dicatat. Catat sebagai donasi tanpa nama.', 422);
+    }
     const id = tambahDonasi(db, {
       donaturId,
       jenis: v.pilihan(b.jenis, 'Jenis donasi', JENIS_DONASI),

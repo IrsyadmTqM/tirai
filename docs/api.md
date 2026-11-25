@@ -40,6 +40,9 @@ Diuji otomatis di `tests/rbac.test.js` (daftar di `tests/matriks-rbac.js`).
 | `GET /api/data-saya/riwayat` | tidak | tidak | tidak | milik sendiri |
 | `GET /api/data-saya/ekspor` | tidak | tidak | tidak | milik sendiri |
 | `POST /api/data-saya/hapus` | tidak | tidak | tidak | milik sendiri |
+| `GET /api/data-saya/persetujuan` | tidak | tidak | tidak | milik sendiri (donatur) |
+| `PUT /api/data-saya/persetujuan/:tujuan` | tidak | tidak | tidak | milik sendiri (donatur) |
+| `PUT /api/data-saya/kontak` | tidak | tidak | tidak | milik sendiri (donatur) |
 | `GET /api/permintaan` | ya | tidak | tidak | tidak |
 | `POST /api/permintaan/:id/proses` | ya | tidak | tidak | tidak |
 
@@ -87,15 +90,15 @@ Kolom yang tercantum di `tertutup` bernilai `null`: server tidak mengirim nilai 
 
 ### `GET /api/donatur`
 
-`{ "donatur": [{ "id", "nama" }] }`. Tanpa kontak.
+`{ "donatur": [{ "id", "nama" }] }`. Tanpa kontak, dan hanya donatur yang mengizinkan namanya terlihat (`nama_di_catatan`).
 
 ### `GET /api/donasi`
 
-`{ "donasi": [{ "id", "tanggal", "jenis", "nominal", "donatur" }] }`. `donatur` bernilai `null` untuk donasi tanpa nama.
+`{ "donasi": [{ "id", "tanggal", "jenis", "nominal", "donatur" }] }`. `donatur` bernilai `null` untuk donasi tanpa nama dan untuk donatur yang mencabut izin `nama_di_catatan`.
 
 ### `POST /api/donasi`
 
-Badan: `{ "donatur_id": 1 | null, "jenis": "zakat_fitrah|zakat_mal|infak|sedekah|wakaf", "nominal": 50000, "tanggal": "2026-11-20" }`. Nominal bilangan bulat positif. Tanggal tidak boleh di masa depan. Jawaban 201: `{ "id" }`.
+Badan: `{ "donatur_id": 1 | null, "jenis": "zakat_fitrah|zakat_mal|infak|sedekah|wakaf", "nominal": 50000, "tanggal": "2026-11-20" }`. Nominal bilangan bulat positif. Tanggal tidak boleh di masa depan. Donatur yang mencabut izin nama ditolak 422. Jawaban 201: `{ "id" }`.
 
 ### `POST /api/penyaluran`
 
@@ -148,6 +151,18 @@ Berkas unduhan (`Content-Disposition: attachment`) berisi data, transaksi, dan r
 ### `POST /api/data-saya/hapus`
 
 Mengajukan permintaan hapus. Jawaban 201: `{ "id", "permintaan_hapus": { "id", "subjek", "diajukan_peran", "diajukan_pada", "status": "menunggu", "diproses_pada": null } }`. Bila masih ada yang menunggu: 409.
+
+### `GET /api/data-saya/persetujuan`
+
+`{ "persetujuan": [ { "tujuan": "kontak_bukti", "judul", "uraian", "diberikan": true, "diubah_pada" } ] }`. Tujuan: `kontak_bukti`, `nama_di_catatan`.
+
+### `PUT /api/data-saya/persetujuan/:tujuan`
+
+Badan: `{ "diberikan": true | false }`. Jawaban: `{ "persetujuan": [...], "akibat": ["kontak_dihapus"] }`. `akibat` berisi apa yang langsung terjadi karena perubahan itu.
+
+### `PUT /api/data-saya/kontak`
+
+Badan: `{ "kontak": "nama@contoh.test" }`. Hanya bila izin `kontak_bukti` diberikan (selain itu 422). Disimpan terenkripsi.
 
 ## Hak mustahik lewat amil
 

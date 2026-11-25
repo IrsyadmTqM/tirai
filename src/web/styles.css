@@ -947,6 +947,94 @@ textarea {
   margin: 2px 0 0;
 }
 
+/* Izin dan sakelar */
+
+.daftar-izin {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.daftar-izin li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hijau-kertas);
+}
+
+.daftar-izin h3 {
+  margin-bottom: 4px;
+}
+
+.daftar-izin .keterangan {
+  margin: 0;
+}
+
+.sakelar {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--tinta);
+}
+
+.sakelar-jalur {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: 13px;
+  background: #8a959f;
+  transition: background-color 0.2s;
+}
+
+.sakelar-tombol {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.sakelar[aria-checked='true'] .sakelar-jalur {
+  background: var(--hijau-masjid);
+}
+
+.sakelar[aria-checked='true'] .sakelar-tombol {
+  transform: translateX(20px);
+}
+
+.sakelar-teks {
+  min-width: 8ch;
+  text-align: left;
+  font-size: var(--kecil);
+  font-weight: 700;
+}
+
+.form-kontak {
+  margin-top: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.form-kontak label {
+  font-size: var(--kecil);
+  font-weight: 700;
+}
+
+.form-kontak input {
+  flex: 1 1 220px;
+}
+
 /* Pemberitahuan singkat */
 
 .pemberitahuan-wadah {

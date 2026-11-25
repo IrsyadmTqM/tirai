@@ -54,6 +54,7 @@ function anonimkanDonatur(db, brankas, id) {
   const d = db.prepare('SELECT kunci_id FROM donatur WHERE id = ?').get(id);
   if (!d) return;
   db.prepare('UPDATE donasi SET donatur_id = NULL WHERE donatur_id = ?').run(id);
+  db.prepare('DELETE FROM persetujuan WHERE donatur_id = ?').run(id);
   db.prepare('DELETE FROM pengguna WHERE donatur_id = ?').run(id); // sesi ikut terhapus (ON DELETE CASCADE)
   db.prepare('DELETE FROM donatur WHERE id = ?').run(id);
   brankas.musnahkan(d.kunci_id);

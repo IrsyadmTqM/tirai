@@ -40,6 +40,14 @@ export const ENDPOINT = [
   { metode: 'get', jalur: '/api/data-saya', boleh: ['pemilik'] },
   { metode: 'get', jalur: '/api/data-saya/riwayat', boleh: ['pemilik'] },
   { metode: 'get', jalur: '/api/data-saya/ekspor?format=csv', boleh: ['pemilik'] },
+  { metode: 'get', jalur: '/api/data-saya/persetujuan', boleh: ['pemilik'] },
+  {
+    metode: 'put',
+    jalur: '/api/data-saya/persetujuan/nama_di_catatan',
+    body: { diberikan: true },
+    boleh: ['pemilik'],
+  },
+  { metode: 'put', jalur: '/api/data-saya/kontak', body: { kontak: 'baru@contoh.test' }, boleh: ['pemilik'] },
   { metode: 'post', jalur: '/api/data-saya/hapus', boleh: ['pemilik'] },
   { metode: 'get', jalur: '/api/permintaan', boleh: ['admin'] },
   // Permintaan nomor 1 dibuat oleh baris di atas; ditolak supaya akun uji tetap ada.

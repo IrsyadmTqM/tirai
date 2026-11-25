@@ -69,6 +69,15 @@ enkripsi kolom mulai langkah 3.
 | `pengguna_id` | Pemilik sesi | Tidak dikirim ke browser |
 | `kedaluwarsa_pada` | Sesi berakhir otomatis setelah 8 jam | - |
 
+## persetujuan
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `donatur_id` | Donatur pemilik persetujuan | RBAC: hanya donatur itu yang mengubah |
+| `tujuan` | Tujuan penggunaan data yang disetujui atau ditolak | Pilihan tetap |
+| `diberikan` | Status izin: diberikan atau dicabut | RBAC |
+| `diubah_pada` | Kapan izin terakhir diubah, sebagai bukti persetujuan | - |
+
 ## permintaan_hapus
 
 | Kolom | Alasan | Perlindungan |

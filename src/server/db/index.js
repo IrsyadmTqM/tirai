@@ -10,7 +10,7 @@ import * as data from './data-sintetis.js';
 
 const SKEMA = fs.readFileSync(new URL('./skema.sql', import.meta.url), 'utf8');
 
-export const TABEL = ['wilayah', 'kunci_data', 'donatur', 'mustahik', 'pengguna', 'sesi', 'permintaan_hapus', 'audit_log', 'donasi', 'penyaluran'];
+export const TABEL = ['wilayah', 'kunci_data', 'donatur', 'mustahik', 'pengguna', 'sesi', 'persetujuan', 'permintaan_hapus', 'audit_log', 'donasi', 'penyaluran'];
 
 // Lokasi berkas database: DB_PATH dari .env, atau data/tirai.db di akar proyek.
 export function lokasiDatabase() {
@@ -101,6 +101,16 @@ export async function isiDataSintetis(db, kunci) {
         data.AWAL_DATA,
       );
     });
+
+    // Persetujuan awal: izin kontak hanya bila kontak diisi; izin nama
+    // diberikan, kecuali donatur yang dalam data sintetis mencabutnya.
+    const tambahPersetujuan = db.prepare(
+      'INSERT INTO persetujuan (donatur_id, tujuan, diberikan, diubah_pada) VALUES (?, ?, ?, ?)',
+    );
+    for (const d of data.DONATUR) {
+      tambahPersetujuan.run(d.id, 'kontak_bukti', d.kontak ? 1 : 0, data.AWAL_DATA);
+      tambahPersetujuan.run(d.id, 'nama_di_catatan', data.NAMA_DICABUT.includes(d.id) ? 0 : 1, data.AWAL_DATA);
+    }
 
     const tambahDonasi = db.prepare(
       `INSERT INTO donasi (id, donatur_id, jenis, nominal, tanggal, dicatat_oleh, dibuat_pada)

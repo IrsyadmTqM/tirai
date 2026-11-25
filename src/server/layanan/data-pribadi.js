@@ -5,6 +5,7 @@
 
 import { INVENTARIS } from '../db/inventaris.js';
 import { riwayatSubjek } from '../audit.js';
+import { bacaPersetujuan } from './persetujuan.js';
 
 const LABEL = {
   nama: 'Nama',
@@ -99,6 +100,15 @@ export function paketEkspor(db, brankas, subjek) {
     keterangan: 'Ekspor data pribadi dari Tirai. Prototipe dengan data sintetis.',
     dibuat_pada: new Date().toISOString(),
     ...isi,
+    persetujuan:
+      subjek.jenis === 'donatur'
+        ? bacaPersetujuan(db, subjek.id).map(({ tujuan, judul, diberikan, diubah_pada }) => ({
+            tujuan,
+            judul,
+            diberikan,
+            diubah_pada,
+          }))
+        : [],
     riwayat_akses: riwayatSubjek(db, subjek.jenis, subjek.id).map(({ waktu, peran, aksi, objek, saluran }) => ({
       waktu,
       peran,
@@ -124,6 +134,7 @@ export function keCsv(paket) {
   paket.transaksi.baris.forEach((t, i) => {
     for (const [k, v] of Object.entries(t)) baris.push([`${paket.transaksi.jenis} ${i + 1}`, k, v, '']);
   });
+  for (const p of paket.persetujuan ?? []) baris.push(['persetujuan', p.judul, p.diberikan ? 'diberikan' : 'dicabut', '']);
   paket.riwayat_akses.forEach((r, i) => {
     baris.push([`riwayat ${i + 1}`, 'waktu', r.waktu, '']);
     baris.push([`riwayat ${i + 1}`, 'akses', `${r.peran ?? '-'} ${r.aksi} ${r.objek} (${r.saluran})`, '']);

@@ -122,6 +122,13 @@ export const INVENTARIS = {
     },
   },
 
+  persetujuan: {
+    donatur_id: { alasan: 'Donatur pemilik persetujuan', perlindungan: 'RBAC: hanya donatur itu yang mengubah' },
+    tujuan: { alasan: 'Tujuan penggunaan data yang disetujui atau ditolak', perlindungan: 'Pilihan tetap' },
+    diberikan: { alasan: 'Status izin: diberikan atau dicabut', perlindungan: 'RBAC' },
+    diubah_pada: { alasan: 'Kapan izin terakhir diubah, sebagai bukti persetujuan', perlindungan: '-' },
+  },
+
   permintaan_hapus: {
     id: { alasan: 'Penanda baris', perlindungan: '-' },
     subjek_jenis: { alasan: 'Jenis data yang diminta dihapus: donatur atau mustahik', perlindungan: 'Pilihan tetap' },
