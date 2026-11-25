@@ -5,6 +5,7 @@
   --hijau-kertas: #cfe0d8;
   --latar: #eef2f0;
   --tinta: #1c2630;
+  --tinta-lembut: #46525e;
   --lembar: #ffffff;
 
   --teks: 15px;
@@ -18,6 +19,10 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   background: var(--latar);
@@ -27,22 +32,56 @@ body {
   line-height: 1.6;
 }
 
-.lembar {
-  max-width: 72ch;
-  margin: 48px auto;
-  padding: 32px;
-  background: var(--lembar);
-  border-top: 4px solid var(--hijau-masjid);
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin: 0 0 12px;
 }
 
 h1 {
-  margin: 0 0 8px;
   font-size: var(--judul);
   color: var(--hijau-masjid);
 }
 
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+p {
+  margin: 0 0 12px;
+  max-width: 72ch;
+}
+
+a {
+  color: var(--biru-tinta);
+}
+
+code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: var(--latar);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
 .keterangan {
   font-size: var(--kecil);
+  color: var(--tinta-lembut);
+}
+
+.tersamar {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 :focus-visible {
@@ -50,11 +89,197 @@ h1 {
   outline-offset: 2px;
 }
 
+/* Kepala halaman */
+
+.kepala {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 24px;
+}
+
+.merek {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--hijau-masjid);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.kepala nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kepala nav a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--tinta);
+}
+
+/* Tata letak */
+
+.halaman {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+}
+
+.halaman-sempit {
+  max-width: 480px;
+}
+
+.lembar {
+  background: var(--lembar);
+  border-top: 4px solid var(--hijau-masjid);
+  padding: 24px;
+  margin: 0 0 24px;
+}
+
+/* Formulir dan tombol */
+
+.formulir {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.formulir label {
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #8a959f;
+  border-radius: 4px;
+  background: var(--lembar);
+}
+
+.tombol {
+  font: inherit;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.tombol:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.tombol-utama {
+  background: var(--hijau-masjid);
+  color: #fff;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.tombol-teks {
+  background: none;
+  color: var(--biru-tinta);
+  text-decoration: underline;
+  padding: 0 10px;
+}
+
+.pesan-galat {
+  color: var(--merah-garis);
+  font-weight: 700;
+}
+
+.akun-demo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.akun-demo .tombol-teks {
+  padding-left: 0;
+}
+
+/* Buku kas */
+
+.buku-kas-gulir {
+  overflow-x: auto;
+}
+
+.buku-kas {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  background: var(--lembar);
+}
+
+.buku-kas caption {
+  text-align: left;
+  font-size: var(--kecil);
+  color: var(--tinta-lembut);
+  padding-bottom: 8px;
+}
+
+.buku-kas th,
+.buku-kas td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--hijau-kertas);
+}
+
+.buku-kas thead th {
+  font-size: var(--kecil);
+  border-bottom: 3px double var(--merah-garis);
+  white-space: nowrap;
+}
+
+.buku-kas .kolom-tanggal {
+  white-space: nowrap;
+}
+
+.buku-kas .kolom-nominal {
+  text-align: right;
+  border-left: 3px double var(--merah-garis);
+  white-space: nowrap;
+}
+
+.buku-kas .kolom-alamat {
+  min-width: 18ch;
+}
+
+.buku-kas .kolom-kondisi {
+  min-width: 16ch;
+}
+
+.tirai-sel {
+  display: inline-block;
+  width: 100%;
+  min-width: 5ch;
+  height: 1.1em;
+  vertical-align: middle;
+  background: var(--tinta);
+  border-radius: 1px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -12,6 +12,12 @@ const jumlah = Object.entries(hitungBaris(db))
 console.log(`Database sintetis dibuat ulang: ${lokasi}`);
 console.log(`Isi: ${jumlah}`);
 
-createApp().listen(port, () => {
+const opsi = {
+  peragaan: process.env.MODE_PERAGAAN !== 'mati',
+  cookieAman: process.env.NODE_ENV === 'production',
+};
+if (opsi.peragaan) console.log('Mode peragaan aktif: beranda menampilkan buku kas sintetis per peran.');
+
+createApp({ db, opsi }).listen(port, () => {
   console.log(`Tirai server berjalan di http://localhost:${port}`);
 });

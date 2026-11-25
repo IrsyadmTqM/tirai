@@ -1,9 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../src/server/app.js';
+import { siapkanApp } from './bantuan.js';
 
 describe('kerangka server', () => {
-  const app = createApp();
+  let app;
+  beforeAll(async () => {
+    ({ app } = await siapkanApp());
+  });
 
   it('GET /api/health menjawab ok', async () => {
     const res = await request(app).get('/api/health');

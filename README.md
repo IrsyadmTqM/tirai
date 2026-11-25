@@ -8,7 +8,7 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 1 (skema database dan data sintetis) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Langkah 2 (login dan RBAC) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
 
 ## Kebutuhan
 
@@ -71,7 +71,7 @@ Memperbarui [docs/inventaris-data.md](docs/inventaris-data.md) setelah mengubah 
 npm run docs:inventaris
 ```
 
-Akun demo (semua data sintetis, kata sandi semua akun: `tirai-demo`). Login baru tersedia di langkah 2.
+Akun demo (semua data sintetis, kata sandi semua akun: `tirai-demo`). Masuk lewat halaman `/masuk`.
 
 | Nama pengguna | Peran |
 | --- | --- |
@@ -91,17 +91,24 @@ Browser (React)  --HTTPS-->  Express (API, RBAC, enkripsi, audit log)  -->  SQLi
 - `src/web/`: tampilan React (Vite).
 - `src/server/`: server Express.
 - `src/server/db/`: skema SQLite, inventaris data (alasan tiap kolom), data sintetis.
+- `src/server/keamanan/`: hash kata sandi, sesi, kebijakan RBAC, middleware keamanan.
+- `src/server/rute/`: endpoint API.
+- `src/bersama/`: label yang dipakai server dan tampilan.
 - `scripts/`: perintah bantu untuk database dan dokumentasi.
 - `tests/`: tes otomatis (Vitest + Supertest).
 - `docs/`: arsitektur, dokumentasi API, pernyataan penggunaan AI, bukti uji.
 
-Penjelasan lengkap ada di [docs/arsitektur.md](docs/arsitektur.md).
+Penjelasan lengkap ada di [docs/arsitektur.md](docs/arsitektur.md). Daftar endpoint dan hak aksesnya ada di [docs/api.md](docs/api.md).
+
+## Mode peragaan
+
+Beranda menampilkan buku kas peragaan: pengunjung memilih peran dan melihat data persis seperti yang dikirim server untuk peran itu, tanpa masuk. Mode ini hanya pantas untuk data sintetis. Untuk pemasangan dengan data sungguhan, matikan dengan `MODE_PERAGAAN=mati` di `.env`.
 
 ## Rencana
 
 0. Kerangka proyek (selesai)
 1. Skema database dan data sintetis (selesai)
-2. Login dan RBAC
+2. Login dan RBAC (selesai)
 3. Enkripsi kolom (AES-256-GCM, envelope encryption)
 4. Audit log append-only
 5. Beranda buku kas interaktif

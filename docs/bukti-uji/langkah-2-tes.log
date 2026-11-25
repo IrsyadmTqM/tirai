@@ -1,0 +1,114 @@
+
+> tirai@1.0.0 test
+> vitest run --reporter=verbose
+
+
+ RUN  v5.1.2 /home/user/tirai
+
+ ✓ tests/autentikasi.test.js > masuk dan sesi > masuk berhasil memasang cookie HttpOnly dan SameSite=Strict 743ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > database hanya menyimpan hash token sesi, bukan token aslinya 338ms
+ ✓ tests/penyaringan.test.js > buku kas per peran > admin: tanpa identitas mustahik dan tanpa nominal per baris, ada ringkasan 11ms
+ ✓ tests/penyaringan.test.js > buku kas per peran > bendahara: nama dan nominal terlihat, alamat dan kondisi tidak dikirim 4ms
+ ✓ tests/penyaringan.test.js > buku kas per peran > amil RW 01: data lengkap wilayahnya, tanpa nominal, wilayah lain tertutup 5ms
+ ✓ tests/penyaringan.test.js > buku kas per peran > jawaban tidak memuat id mustahik untuk peran yang identitasnya tertutup 4ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/buku-kas -> 401 16ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/buku-kas -> diizinkan 9ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/buku-kas -> diizinkan 8ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/buku-kas -> diizinkan 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/buku-kas -> 403 10ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/ringkasan -> 401 11ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/ringkasan -> diizinkan 7ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/ringkasan -> diizinkan 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/ringkasan -> 403 7ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/ringkasan -> 403 7ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/donatur -> 401 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/donatur -> 403 7ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > kata sandi salah dan nama tak terdaftar mendapat jawaban yang sama 640ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/donatur -> diizinkan 7ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/donatur -> 403 5ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/donatur -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/donasi -> 401 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/donasi -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/donasi -> diizinkan 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/donasi -> 403 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/donasi -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: POST /api/donasi -> 401 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: POST /api/donasi -> 403 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: POST /api/donasi -> diizinkan 12ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: POST /api/donasi -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: POST /api/donasi -> 403 7ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: POST /api/penyaluran -> 401 6ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: POST /api/penyaluran -> 403 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: POST /api/penyaluran -> diizinkan 8ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: POST /api/penyaluran -> 403 6ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: POST /api/penyaluran -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/mustahik -> 401 5ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/mustahik -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/mustahik -> diizinkan 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/mustahik -> diizinkan 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/mustahik -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/pengguna -> 401 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/pengguna -> diizinkan 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/pengguna -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/pengguna -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/pengguna -> 403 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: GET /api/wilayah -> 401 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: GET /api/wilayah -> diizinkan 4ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: GET /api/wilayah -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: GET /api/wilayah -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: GET /api/wilayah -> 403 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > tanpa sesi: PATCH /api/pengguna/4 -> 401 2ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > admin: PATCH /api/pengguna/4 -> diizinkan 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > bendahara: PATCH /api/pengguna/4 -> 403 6ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > amil: PATCH /api/pengguna/4 -> 403 3ms
+ ✓ tests/rbac.test.js > matriks RBAC: peran x endpoint > pemilik: PATCH /api/pengguna/4 -> 403 2ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > masukan kosong atau bukan teks ditolak 400 13ms
+ ✓ tests/database.test.js > skema dan minimisasi data > membuat tepat tabel yang tercatat di inventaris 2ms
+ ✓ tests/database.test.js > skema dan minimisasi data > semua tabel STRICT, sehingga tipe kolom ditegakkan 5ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel wilayah punya alasan tertulis 1ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel donatur punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel mustahik punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel pengguna punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel sesi punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel donasi punya alasan tertulis 0ms
+ ✓ tests/database.test.js > skema dan minimisasi data > setiap kolom tabel penyaluran punya alasan tertulis 1ms
+ ✓ tests/database.test.js > skema dan minimisasi data > tidak ada kolom untuk data yang sengaja tidak dikumpulkan 1ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak mustahik di wilayah yang tidak ada (foreign key) 1ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak asnaf di luar delapan kategori 0ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak nominal nol atau negatif 1ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak teks di kolom angka (STRICT) 0ms
+ ✓ tests/database.test.js > batasan integritas di database > amil wajib punya wilayah, peran lain tidak boleh 1ms
+ ✓ tests/database.test.js > batasan integritas di database > akun pemilik data wajib tertaut ke tepat satu donatur atau mustahik 0ms
+ ✓ tests/database.test.js > batasan integritas di database > menolak penanda NIK yang sama untuk dua mustahik (cegah penerima ganda) 0ms
+ ✓ tests/database.test.js > data sintetis > jumlah baris sesuai data sumber 1ms
+ ✓ tests/database.test.js > data sintetis > kontak donatur hanya memakai domain .test yang dicadangkan 1ms
+ ✓ tests/database.test.js > data sintetis > ada akun untuk setiap peran 0ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > setelah 5 kali gagal, percobaan berikutnya ditolak 429 walau kata sandinya benar 2001ms
+ ✓ tests/database.test.js > data sintetis > kata sandi tidak disimpan dalam bentuk asli 522ms
+ ✓ tests/database.test.js > data sintetis > penyaluran tiap jenis dana tidak melebihi dana yang masuk 1ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > keluar menghapus sesi di server 261ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > sesi yang kedaluwarsa ditolak 391ms
+ ✓ tests/penyaringan.test.js > daftar mustahik dan donasi per peran > bendahara melihat mustahik tanpa alamat dan kondisi 5ms
+ ✓ tests/penyaringan.test.js > daftar mustahik dan donasi per peran > amil hanya melihat mustahik wilayahnya 3ms
+ ✓ tests/penyaringan.test.js > daftar mustahik dan donasi per peran > bendahara melihat nama donatur tetapi tidak kontaknya 4ms
+ ✓ tests/autentikasi.test.js > masuk dan sesi > GET /api/saya tanpa sesi menjawab pengguna null 2ms
+ ✓ tests/health.test.js > kerangka server > GET /api/health menjawab ok 26ms
+ ✓ tests/health.test.js > kerangka server > endpoint API yang tidak ada menjawab 404 5ms
+ ✓ tests/health.test.js > kerangka server > tidak membocorkan header X-Powered-By 2ms
+ ✓ tests/autentikasi.test.js > perlindungan web dasar > memasang header keamanan dan melarang cache untuk API 3ms
+ ✓ tests/autentikasi.test.js > perlindungan web dasar > menolak permintaan pengubah data dari situs lain (CSRF) 517ms
+ ✓ tests/penyaringan.test.js > aturan pencatatan > menolak nominal bukan bilangan bulat dan tanggal di masa depan 14ms
+ ✓ tests/penyaringan.test.js > aturan pencatatan > menolak penyaluran yang melebihi saldo jenis dananya 2ms
+ ✓ tests/autentikasi.test.js > perlindungan web dasar > JSON rusak dijawab 400 tanpa membocorkan rincian server 4ms
+ ✓ tests/autentikasi.test.js > perlindungan web dasar > upaya SQL injection lewat nama pengguna tidak membuka akses 258ms
+ ✓ tests/penyaringan.test.js > aturan pencatatan > perubahan peran oleh admin langsung berlaku pada sesi yang sedang berjalan 486ms
+ ✓ tests/penyaringan.test.js > aturan pencatatan > admin tidak bisa mengubah perannya sendiri atau akun pemilik data 290ms
+ ✓ tests/penyaringan.test.js > peragaan beranda > memakai penyaringan yang sama dengan akun sungguhan 1033ms
+ ✓ tests/penyaringan.test.js > peragaan beranda > menolak peran di luar admin, bendahara, amil 527ms
+ ✓ tests/penyaringan.test.js > peragaan beranda > bisa dimatikan untuk pemasangan sungguhan 495ms
+
+ Test Files  5 passed (5)
+      Tests  101 passed (101)
+   Start at  18:52:50
+   Duration  10.35s (tests 97%, import 2%)
+
