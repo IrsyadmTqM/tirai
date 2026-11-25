@@ -15,6 +15,14 @@ enkripsi kolom mulai langkah 3.
 | `id` | Penanda baris | - |
 | `nama` | Membagi tugas amil lapangan per wilayah (misalnya RW) | - |
 
+## kunci_data
+
+| Kolom | Alasan | Perlindungan |
+| --- | --- | --- |
+| `id` | Penanda baris | - |
+| `kunci_terbungkus` | Kunci data milik satu pemilik data, untuk membuka kolom terenkripsinya | Dibungkus AES-256-GCM dengan kunci master yang disimpan di luar database |
+| `dibuat_pada` | Dasar rotasi kunci | - |
+
 ## donatur
 
 | Kolom | Alasan | Perlindungan |
@@ -22,6 +30,7 @@ enkripsi kolom mulai langkah 3.
 | `id` | Penanda baris | - |
 | `nama` | Bukti donasi atas nama donatur | RBAC |
 | `kontak` | Opsional: mengirim bukti donasi bila donatur memintanya | Enkripsi kolom, RBAC |
+| `kunci_id` | Menunjuk kunci data milik donatur ini | Tidak dikirim ke browser |
 | `dibuat_pada` | Dasar menghitung masa simpan data | RBAC |
 
 ## mustahik
@@ -35,6 +44,7 @@ enkripsi kolom mulai langkah 3.
 | `asnaf` | Menentukan hak penerima menurut kategori asnaf | RBAC |
 | `wilayah_id` | Membatasi akses amil hanya pada wilayahnya | RBAC |
 | `nik_hmac` | Mencegah penerima ganda tanpa menyimpan NIK utuh | HMAC berkunci, NIK asli tidak disimpan |
+| `kunci_id` | Menunjuk kunci data milik mustahik ini | Tidak dikirim ke browser |
 | `dibuat_pada` | Dasar menghitung masa simpan data | RBAC |
 
 ## pengguna

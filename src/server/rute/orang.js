@@ -1,30 +1,65 @@
 // Mustahik, akun pengguna, dan wilayah.
 
 import { Router } from 'express';
-import { bacaPengguna, bacaWilayah, daftarMustahik, daftarPengguna, daftarWilayah, ubahPeran } from '../data/orang.js';
+import { ASNAF } from '../../bersama/label.js';
+import { dalamTransaksi } from '../db/index.js';
+import {
+  bacaPengguna,
+  bacaWilayah,
+  daftarMustahik,
+  daftarPengguna,
+  daftarWilayah,
+  nikTerdaftar,
+  tambahMustahik,
+  ubahPeran,
+} from '../data/orang.js';
+import { normalkanNik } from '../keamanan/kripto.js';
 import { boleh } from '../keamanan/kebijakan.js';
 import { wajib } from '../keamanan/middleware.js';
 import * as v from '../validasi.js';
 
 const PERAN_STAF = ['admin', 'bendahara', 'amil'];
 
-export function ruteOrang({ db }) {
+export function ruteOrang({ db, brankas }) {
   const r = Router();
 
   r.get('/mustahik', wajib('mustahik:baca_wilayah', 'mustahik:baca_terbatas'), (req, res) => {
     const p = req.pengguna;
     if (boleh(p.peran, 'mustahik:baca_wilayah')) {
       // Amil: data lengkap, hanya wilayahnya.
-      return res.json({ mustahik: daftarMustahik(db, { wilayahId: p.wilayah_id }) });
+      const mustahik = daftarMustahik(db, brankas, { wilayahId: p.wilayah_id, buka: ['nama', 'alamat', 'kondisi'] });
+      return res.json({ mustahik });
     }
-    // Bendahara: tanpa alamat dan kondisi.
-    const mustahik = daftarMustahik(db).map((m) => ({
-      id: m.id,
-      nama: m.nama,
-      asnaf: m.asnaf,
-      wilayah: m.wilayah,
+    // Bendahara: hanya nama yang didekripsi; alamat dan kondisi tidak.
+    const mustahik = daftarMustahik(db, brankas, { buka: ['nama'] }).map(({ id, nama, asnaf, wilayah }) => ({
+      id,
+      nama,
+      asnaf,
+      wilayah,
     }));
     res.json({ mustahik });
+  });
+
+  // Amil mendaftarkan mustahik baru di wilayahnya. NIK hanya dipakai untuk
+  // menghitung HMAC penanda duplikat, lalu dibuang.
+  r.post('/mustahik', wajib('mustahik:catat_wilayah'), (req, res) => {
+    const b = req.body ?? {};
+    const nik = normalkanNik(b.nik);
+    if (!/^\d{16}$/.test(nik)) throw new v.GalatPermintaan('NIK harus 16 angka');
+    const data = {
+      nama: v.teks(b.nama, 'Nama', { maks: 100 }),
+      alamat: v.teks(b.alamat, 'Alamat', { maks: 200 }),
+      kondisi: v.teks(b.kondisi, 'Kondisi', { maks: 200, boleh_kosong: true }),
+      asnaf: v.pilihan(b.asnaf, 'Asnaf', ASNAF),
+      wilayahId: req.pengguna.wilayah_id,
+      nikHmac: brankas.hmacNik(nik),
+    };
+    // Pesan tidak menyebut di wilayah mana NIK itu terdaftar.
+    if (nikTerdaftar(db, data.nikHmac)) {
+      return res.status(409).json({ error: 'NIK ini sudah terdaftar sebagai penerima' });
+    }
+    const id = dalamTransaksi(db, () => tambahMustahik(db, brankas, data));
+    res.status(201).json({ id });
   });
 
   r.get('/pengguna', wajib('pengguna:kelola'), (req, res) => {

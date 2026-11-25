@@ -13,7 +13,7 @@ import * as v from '../validasi.js';
 
 export const PERAN_PERAGAAN = ['admin', 'bendahara', 'amil'];
 
-export function rutePeragaan({ db, opsi }) {
+export function rutePeragaan({ db, brankas, opsi }) {
   const r = Router();
 
   r.get('/peragaan/buku-kas', (req, res) => {
@@ -21,7 +21,7 @@ export function rutePeragaan({ db, opsi }) {
     const peran = v.pilihan(req.query.peran, 'Peran', PERAN_PERAGAAN);
     const akun = cariAkunMenurutPeran(db, peran);
     if (!akun) return res.status(404).json({ error: 'Akun peragaan tidak ada' });
-    const { tampilan } = susunBukuKas(db, akun);
+    const { tampilan } = susunBukuKas(db, brankas, akun);
     res.json({ ...tampilan, peragaan: true });
   });
 

@@ -20,6 +20,12 @@ export const ENDPOINT = [
     boleh: ['bendahara'],
   },
   { metode: 'get', jalur: '/api/mustahik', boleh: ['bendahara', 'amil'] },
+  {
+    metode: 'post',
+    jalur: '/api/mustahik',
+    body: { nama: 'Penerima Uji', alamat: 'Jl. Uji No. 1, RW 01', asnaf: 'miskin', nik: '0000000000009999' },
+    boleh: ['amil'],
+  },
   { metode: 'get', jalur: '/api/pengguna', boleh: ['admin'] },
   { metode: 'get', jalur: '/api/wilayah', boleh: ['admin'] },
   {

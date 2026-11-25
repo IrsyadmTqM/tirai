@@ -29,6 +29,7 @@ Diuji otomatis di `tests/rbac.test.js` (daftar di `tests/matriks-rbac.js`).
 | `POST /api/donasi` | tidak | ya | tidak | tidak |
 | `POST /api/penyaluran` | tidak | ya | tidak | tidak |
 | `GET /api/mustahik` | tidak | tanpa alamat dan kondisi | wilayahnya | tidak |
+| `POST /api/mustahik` | tidak | tidak | di wilayahnya | tidak |
 | `GET /api/pengguna` | ya | tidak | tidak | tidak |
 | `GET /api/wilayah` | ya | tidak | tidak | tidak |
 | `PATCH /api/pengguna/:id` | ya | tidak | tidak | tidak |
@@ -96,6 +97,10 @@ Badan: `{ "mustahik_id": 1, "jenis_dana": "zakat_fitrah|zakat_mal|infak|sedekah"
 ### `GET /api/mustahik`
 
 Amil: `{ "mustahik": [{ "id", "nama", "alamat", "kondisi", "asnaf", "wilayah_id", "wilayah" }] }`, hanya wilayahnya. Bendahara: `{ "mustahik": [{ "id", "nama", "asnaf", "wilayah" }] }`.
+
+### `POST /api/mustahik`
+
+Hanya amil, untuk wilayahnya sendiri. Badan: `{ "nama", "alamat", "kondisi" (opsional), "asnaf", "nik" }`. NIK harus 16 angka. NIK tidak disimpan: server hanya menyimpan HMAC-nya. Nama, alamat, dan kondisi disimpan terenkripsi. Jawaban 201: `{ "id" }`. NIK yang sudah terdaftar: 409.
 
 ### `GET /api/pengguna`
 

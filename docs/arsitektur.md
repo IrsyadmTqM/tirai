@@ -8,8 +8,8 @@ Dokumen ini diperbarui setiap langkah selesai. Bagian yang belum dibangun ditand
 | --- | --- | --- |
 | Tampilan | React + Vite, Motion | Antarmuka pengguna. Tidak pernah dipercaya untuk keputusan akses |
 | Server | Node.js + Express | API, pemeriksaan RBAC, enkripsi dan dekripsi kolom, pencatatan audit log |
-| Database | SQLite (`node:sqlite`) | Penyimpanan. Kolom sensitif disimpan sebagai ciphertext (rencana langkah 3) |
-| Kunci | Variabel lingkungan (`.env`), di luar database | Kunci master dan kunci HMAC NIK (rencana) |
+| Database | SQLite (`node:sqlite`) | Penyimpanan. Kolom sensitif disimpan sebagai ciphertext AES-256-GCM |
+| Kunci | Variabel lingkungan (`.env`), di luar database | Kunci master (pembungkus kunci data) dan kunci HMAC NIK |
 
 Pada mode produksi, Express juga menyajikan hasil build React dari folder `dist/`, sehingga aplikasi cukup dijalankan sebagai satu proses.
 
@@ -50,7 +50,7 @@ Keputusan teknis:
 - Aturan penting ditegakkan di database, tidak hanya di kode: kategori asnaf dan jenis dana dibatasi `CHECK`, nominal harus positif, amil wajib punya wilayah, akun pemilik data wajib tertaut ke tepat satu donatur atau mustahik, dan penanda NIK unik.
 - Database dibuat ulang dengan data sintetis setiap server menyala (`data/tirai.db`, tidak masuk git). Perubahan dari aplikasi hilang saat server dimulai ulang. Ini disengaja untuk prototipe dan demo online.
 - Donasi boleh tanpa donatur (`donatur_id` kosong) untuk donatur yang memilih tanpa nama.
-- `nik_hmac` sudah ada di skema, tetapi baru diisi di langkah 3 bersama kunci HMAC.
+- `nik_hmac` berisi HMAC dari NIK, bukan NIK (lihat bagian Enkripsi kolom).
 - Kata sandi akun disimpan sebagai hash scrypt (modul `crypto` bawaan Node.js) dengan salt acak per akun.
 
 Hal yang perlu dikonfirmasi ke pengurus atau dosen:
@@ -82,7 +82,34 @@ Peragaan di beranda (`/api/peragaan/buku-kas`) memakai fungsi penyaring yang sam
 
 Daftar endpoint dan hak aksesnya: [api.md](api.md).
 
+## Enkripsi kolom (langkah 3)
+
+```
+MASTER_KEY (.env, di luar database)
+   │ membungkus (AES-256-GCM)
+   ▼
+kunci_data: satu kunci 32 byte per donatur dan per mustahik (tersimpan terbungkus)
+   │ mengenkripsi (AES-256-GCM, IV acak, AAD = "tabel.kolom")
+   ▼
+donatur.kontak, mustahik.nama, mustahik.alamat, mustahik.kondisi  →  "v1:<base64(iv|tag|ciphertext)>"
+```
+
+- Kode: [`src/server/keamanan/kripto.js`](../src/server/keamanan/kripto.js) (primitif) dan [`brankas.js`](../src/server/keamanan/brankas.js) (pengelola kunci data). Hanya memakai modul `crypto` bawaan Node.js.
+- AAD berisi nama tabel dan kolom. Ciphertext alamat yang dipindah ke kolom nama akan gagal dibuka.
+- Database menolak teks biasa di kolom terenkripsi lewat `CHECK (kolom LIKE 'v1:%')`. Kelalaian kode tidak bisa diam-diam menyimpan data asli.
+- Dekripsi hanya untuk sel yang lolos RBAC. Buku kas untuk admin tidak mendekripsi apa pun, dan untuk bendahara hanya nama. Ini dibuktikan oleh tes.
+- NIK tidak disimpan. Server menghitung HMAC-SHA256 dengan `NIK_HMAC_KEY`, menyimpannya di `nik_hmac` (unik), lalu membuang NIK. Pendaftaran NIK yang sama ditolak 409 tanpa menyebut wilayah tempat NIK itu terdaftar.
+- Memusnahkan kunci data membuat ciphertext pemiliknya tidak bisa dibuka lagi. Ini dasar penghapusan di langkah 6.
+- `PRAGMA secure_delete = ON`: isi yang dihapus ditimpa nol di berkas database.
+
+Batasan yang perlu ditulis jujur di laporan:
+
+- Server yang sedang berjalan memegang kunci master di memori. Enkripsi kolom melindungi berkas database dan cadangannya yang bocor, bukan server yang sudah dikuasai penyerang. Ini bukan E2EE.
+- Kunci data terbungkus disimpan di database yang sama. Cadangan lama yang berisi kunci terbungkus masih bisa dibuka oleh siapa pun yang juga memegang kunci master. Pemusnahan kunci hanya berlaku untuk database yang sedang dipakai.
+- Panjang ciphertext mengikuti panjang teks asli. Nama pendek menghasilkan ciphertext pendek.
+- Nama donatur tidak dienkripsi, sesuai inventaris data (cukup RBAC). Ini bisa diubah bila tim menilai perlu.
+- Bila `MASTER_KEY` kosong, server memakai kunci sementara di memori. Ini cukup untuk prototipe karena database dibuat ulang setiap server menyala. Pada pemasangan sungguhan, kunci wajib diisi dan sebaiknya disimpan di pengelola rahasia, bukan berkas `.env`.
+
 ## Rencana lanjutan
 
-- Envelope encryption: tiap pemilik data punya kunci data sendiri yang dibungkus kunci master. Penghapusan data pribadi dapat dilakukan dengan memusnahkan kunci data (crypto-shredding), sementara catatan keuangan tetap tersimpan tanpa identitas. Usulan ini perlu keputusan tim dan dosen.
 - Audit log append-only, dikunci juga di level database dengan trigger yang menolak UPDATE dan DELETE.

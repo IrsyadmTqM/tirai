@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { Brankas } from './keamanan/brankas.js';
 import { asalSama, headerKeamanan, kenaliPengguna } from './keamanan/middleware.js';
 import { ruteAutentikasi } from './rute/autentikasi.js';
 import { ruteKeuangan } from './rute/keuangan.js';
@@ -13,11 +14,15 @@ const WEB_DIST = path.resolve(__dirname, '../../dist');
 
 // opsi.peragaan: aktifkan buku kas peragaan di beranda (data sintetis saja).
 // opsi.cookieAman: cookie hanya dikirim lewat HTTPS (aktifkan di produksi).
-export function createApp({ db, opsi = {} } = {}) {
-  if (!db) throw new Error('createApp membutuhkan db');
-  const konteks = { db, opsi: { peragaan: true, cookieAman: false, ...opsi } };
+// kunci: { master, nik } dari muatKunci(), sama dengan yang dipakai saat
+// database diisi.
+export function createApp({ db, kunci, opsi = {} } = {}) {
+  if (!db || !kunci) throw new Error('createApp membutuhkan db dan kunci');
+  const brankas = new Brankas(db, kunci);
+  const konteks = { db, brankas, opsi: { peragaan: true, cookieAman: false, ...opsi } };
 
   const app = express();
+  app.locals.brankas = brankas;
   app.disable('x-powered-by');
   app.use(headerKeamanan);
   app.use(express.json({ limit: '100kb' }));
