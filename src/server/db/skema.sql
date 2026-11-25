@@ -113,6 +113,18 @@ CREATE TABLE persetujuan (
   PRIMARY KEY (donatur_id, tujuan)
 ) STRICT;
 
+-- Catatan pribadi yang dienkripsi di browser pemilik data (E2EE terbatas).
+-- Server hanya menyimpan isi terenkripsi dan parameter untuk membukanya;
+-- kata sandi catatan dan kuncinya tidak pernah sampai ke server.
+CREATE TABLE catatan_rahasia (
+  pengguna_id  INTEGER PRIMARY KEY REFERENCES pengguna(id) ON DELETE CASCADE,
+  isi          TEXT NOT NULL CHECK (length(isi) BETWEEN 24 AND 16000),
+  iv           TEXT NOT NULL CHECK (length(iv) = 16),
+  salt         TEXT NOT NULL CHECK (length(salt) = 24),
+  iterasi      INTEGER NOT NULL CHECK (iterasi BETWEEN 100000 AND 5000000),
+  diubah_pada  TEXT NOT NULL
+) STRICT;
+
 -- Permintaan hapus data pribadi. Diajukan pemilik data (atau amil atas
 -- nama mustahik), diproses admin. Orang dirujuk lewat nomor; admin tidak
 -- melihat nama. Tanpa kolom alasan teks bebas, supaya tidak ada data pribadi

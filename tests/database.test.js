@@ -141,6 +141,7 @@ describe('data sintetis', () => {
       pengguna: data.PENGGUNA.length,
       sesi: 0,
       persetujuan: data.DONATUR.length * 2,
+      catatan_rahasia: 0,
       permintaan_hapus: 0,
       audit_log: 0,
       donasi: data.DONASI.length,

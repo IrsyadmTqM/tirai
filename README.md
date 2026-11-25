@@ -8,7 +8,16 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 7 (persetujuan) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Semua langkah rencana (0 sampai 8) selesai sebagai prototipe. Hasil uji dan buktinya: [docs/bukti-uji/README.md](docs/bukti-uji/README.md). Hal yang masih perlu keputusan tim, dosen, atau pengurus ditandai di [docs/arsitektur.md](docs/arsitektur.md), dan semua rujukan ayat, hadis, serta pasal undang-undang masih bertanda [VERIFIKASI].
+
+## Fitur
+
+- Beranda dengan buku kas peragaan: pilih peran, dan data yang tidak boleh dilihat peran itu ditutup tirai hitam. Server tidak mengirim isinya sama sekali.
+- Login dengan sesi cookie HttpOnly, dan RBAC untuk admin, bendahara, amil lapangan, dan pemilik data.
+- Enkripsi kolom AES-256-GCM dengan kunci per pemilik data (envelope encryption). NIK hanya disimpan sebagai HMAC.
+- Audit log yang hanya bisa ditambah dan tidak memuat data pribadi asli.
+- Dasbor Data saya: data beserta alasan pengumpulannya, riwayat akses, unduh JSON dan CSV, permintaan hapus, izin yang bisa dicabut, dan catatan pribadi yang dienkripsi di browser.
+- Dasbor bendahara, amil, dan admin.
 
 ## Kebutuhan
 
@@ -102,7 +111,7 @@ Browser (React)  --HTTPS-->  Express (API, RBAC, enkripsi, audit log)  -->  SQLi
 - `src/server/keamanan/`: hash kata sandi, sesi, kebijakan RBAC, middleware keamanan.
 - `src/server/rute/`: endpoint API.
 - `src/bersama/`: label yang dipakai server dan tampilan.
-- `scripts/`: perintah bantu untuk database dan dokumentasi.
+- `scripts/`: perintah bantu untuk database dan dokumentasi; `scripts/bukti-browser/` berisi pemeriksaan Playwright.
 - `tests/`: tes otomatis (Vitest + Supertest).
 - `docs/`: arsitektur, dokumentasi API, pernyataan penggunaan AI, bukti uji.
 
@@ -122,7 +131,7 @@ Beranda menampilkan buku kas peragaan: pengunjung memilih peran dan melihat data
 5. Beranda buku kas interaktif (selesai)
 6. Dasbor "Data saya": lihat, riwayat akses, ekspor, hapus (selesai)
 7. Consent (selesai)
-8. E2EE terbatas (opsional)
+8. E2EE terbatas (selesai)
 
 ## Lisensi
 

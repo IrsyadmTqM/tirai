@@ -15,5 +15,6 @@ Alat: Claude Code (Anthropic).
 | 2026-11-25 | Langkah 5 | Beranda: buku kas peragaan dengan animasi tirai, angka berputar, log meluncur, bagian Cara Tirai menjaga data, gaya tampilan, pemeriksaan reduced-motion dan aksesibilitas dengan Playwright | (diisi tim setelah memeriksa) |
 | 2026-11-25 | Langkah 6 | Dasbor Data saya (data, riwayat akses, ekspor JSON/CSV, permintaan hapus), hak mustahik lewat amil, pemrosesan permintaan oleh admin dengan anonimisasi, dasbor bendahara/amil/admin, tes | (diisi tim setelah memeriksa) |
 | 2026-11-25 | Langkah 7 | Tabel persetujuan per tujuan dengan akibat nyata (hapus kontak, sembunyikan nama dari bendahara), endpoint dan sakelar izin di Data saya, tes | (diisi tim setelah memeriksa) |
+| 2026-11-25 | Langkah 8 | Catatan pribadi E2EE terbatas (Web Crypto: PBKDF2 + AES-GCM di browser), endpoint penyimpan ciphertext, tes, pemeriksaan XSS di browser, indeks bukti uji, skrip pemeriksaan Playwright | (diisi tim setelah memeriksa) |
 
 Catatan: AI tidak dipakai sebagai sumber teks ayat, hadis, atau pasal undang-undang. Semua rujukan semacam itu diperiksa manusia ke sumber asli.

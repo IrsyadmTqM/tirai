@@ -91,6 +91,47 @@ export function ruteDataSaya({ db, brankas }) {
     res.json({ ok: true });
   });
 
+  // Catatan pribadi E2EE terbatas. Server hanya menyimpan dan mengembalikan
+  // isi terenkripsi; tidak ada kode di server yang bisa membukanya.
+  const BASE64 = /^[A-Za-z0-9+/]+={0,2}$/;
+  const base64 = (nilai, nama, panjang) => {
+    if (typeof nilai !== 'string' || !BASE64.test(nilai)) throw new v.GalatPermintaan(`${nama} harus base64`);
+    if (!panjang(nilai.length)) throw new v.GalatPermintaan(`Panjang ${nama} tidak valid`);
+    return nilai;
+  };
+
+  r.get('/data-saya/catatan', wajib('catatan:kelola'), (req, res) => {
+    const subjek = subjekSaya(req);
+    const catatan = db
+      .prepare('SELECT isi, iv, salt, iterasi, diubah_pada FROM catatan_rahasia WHERE pengguna_id = ?')
+      .get(req.pengguna.id);
+    if (catatan) catat(db, { pengguna: req.pengguna, aksi: 'baca', objek: 'catatan', subjek });
+    res.json({ catatan: catatan ? { ...catatan } : null });
+  });
+
+  r.put('/data-saya/catatan', wajib('catatan:kelola'), (req, res) => {
+    const subjek = subjekSaya(req);
+    const b = req.body ?? {};
+    const isi = base64(b.isi, 'isi', (n) => n >= 24 && n <= 16000);
+    const iv = base64(b.iv, 'iv', (n) => n === 16);
+    const salt = base64(b.salt, 'salt', (n) => n === 24);
+    const iterasi = v.bilanganBulat(b.iterasi, 'iterasi', { min: 100000, maks: 5000000 });
+    db.prepare(
+      `INSERT INTO catatan_rahasia (pengguna_id, isi, iv, salt, iterasi, diubah_pada) VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT (pengguna_id) DO UPDATE SET isi = excluded.isi, iv = excluded.iv, salt = excluded.salt,
+         iterasi = excluded.iterasi, diubah_pada = excluded.diubah_pada`,
+    ).run(req.pengguna.id, isi, iv, salt, iterasi, new Date().toISOString());
+    catat(db, { pengguna: req.pengguna, aksi: 'ubah', objek: 'catatan', subjek });
+    res.json({ ok: true });
+  });
+
+  r.delete('/data-saya/catatan', wajib('catatan:kelola'), (req, res) => {
+    const subjek = subjekSaya(req);
+    db.prepare('DELETE FROM catatan_rahasia WHERE pengguna_id = ?').run(req.pengguna.id);
+    catat(db, { pengguna: req.pengguna, aksi: 'hapus', objek: 'catatan', subjek });
+    res.status(204).end();
+  });
+
   // Admin: daftar permintaan hapus. Orang dirujuk dengan nomor saja.
   r.get('/permintaan', wajib('permintaan:proses'), (req, res) => {
     catat(db, { pengguna: req.pengguna, aksi: 'baca', objek: 'permintaan' });

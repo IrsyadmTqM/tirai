@@ -129,6 +129,18 @@ export const INVENTARIS = {
     diubah_pada: { alasan: 'Kapan izin terakhir diubah, sebagai bukti persetujuan', perlindungan: '-' },
   },
 
+  catatan_rahasia: {
+    pengguna_id: { alasan: 'Pemilik catatan', perlindungan: 'RBAC: hanya pemiliknya' },
+    isi: {
+      alasan: 'Catatan pribadi pilihan pemilik data (misalnya perhitungan zakat mal)',
+      perlindungan: 'Dienkripsi di browser (AES-256-GCM); server tidak punya kuncinya',
+    },
+    iv: { alasan: 'Diperlukan browser untuk membuka catatan', perlindungan: 'Bukan rahasia' },
+    salt: { alasan: 'Diperlukan browser untuk menurunkan kunci dari kata sandi catatan', perlindungan: 'Bukan rahasia' },
+    iterasi: { alasan: 'Jumlah iterasi PBKDF2 yang dipakai saat mengunci', perlindungan: 'Bukan rahasia' },
+    diubah_pada: { alasan: 'Kapan catatan terakhir disimpan', perlindungan: '-' },
+  },
+
   permintaan_hapus: {
     id: { alasan: 'Penanda baris', perlindungan: '-' },
     subjek_jenis: { alasan: 'Jenis data yang diminta dihapus: donatur atau mustahik', perlindungan: 'Pilihan tetap' },
