@@ -8,11 +8,11 @@ Tugas besar mata kuliah ICT dan Islam, Topik D: Perancangan Aplikasi Privacy-Fir
 
 ## Status
 
-Langkah 0 (kerangka proyek) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
+Langkah 1 (skema database dan data sintetis) selesai. Fitur dikerjakan bertahap, lihat [Rencana](#rencana).
 
 ## Kebutuhan
 
-- Node.js 22 atau lebih baru
+- Node.js 22.13 atau lebih baru (memakai modul `node:sqlite` bawaan)
 - npm
 
 ## Instalasi
@@ -49,6 +49,39 @@ Menjalankan tes:
 npm test
 ```
 
+## Database dan data sintetis
+
+Setiap server menyala, database `data/tirai.db` dihapus lalu dibuat ulang dengan skema dan data sintetis. Perubahan dari aplikasi hilang saat server dimulai ulang. Lokasi berkas bisa diganti lewat `DB_PATH` di `.env`.
+
+Membuat ulang database tanpa menjalankan server:
+
+```bash
+npm run db:reset
+```
+
+Melihat isi mentah setiap tabel langsung dari berkas database:
+
+```bash
+npm run db:lihat
+```
+
+Memperbarui [docs/inventaris-data.md](docs/inventaris-data.md) setelah mengubah `src/server/db/inventaris.js`:
+
+```bash
+npm run docs:inventaris
+```
+
+Akun demo (semua data sintetis, kata sandi semua akun: `tirai-demo`). Login baru tersedia di langkah 2.
+
+| Nama pengguna | Peran |
+| --- | --- |
+| `admin` | Admin |
+| `bendahara` | Bendahara |
+| `amil-rw01` | Amil lapangan RW 01 |
+| `amil-rw02` | Amil lapangan RW 02 |
+| `donatur-01` | Pemilik data (donatur Ahmad Fauzi) |
+| `donatur-02` | Pemilik data (donatur Siti Rahmawati) |
+
 ## Arsitektur singkat
 
 ```
@@ -57,6 +90,8 @@ Browser (React)  --HTTPS-->  Express (API, RBAC, enkripsi, audit log)  -->  SQLi
 
 - `src/web/`: tampilan React (Vite).
 - `src/server/`: server Express.
+- `src/server/db/`: skema SQLite, inventaris data (alasan tiap kolom), data sintetis.
+- `scripts/`: perintah bantu untuk database dan dokumentasi.
 - `tests/`: tes otomatis (Vitest + Supertest).
 - `docs/`: arsitektur, dokumentasi API, pernyataan penggunaan AI, bukti uji.
 
@@ -65,7 +100,7 @@ Penjelasan lengkap ada di [docs/arsitektur.md](docs/arsitektur.md).
 ## Rencana
 
 0. Kerangka proyek (selesai)
-1. Skema database dan data sintetis
+1. Skema database dan data sintetis (selesai)
 2. Login dan RBAC
 3. Enkripsi kolom (AES-256-GCM, envelope encryption)
 4. Audit log append-only

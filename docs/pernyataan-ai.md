@@ -8,5 +8,6 @@ Alat: Claude Code (Anthropic).
 | --- | --- | --- | --- |
 | 2026-11-25 | Perencanaan | Usulan stack, tahapan pengerjaan, usulan nama aplikasi | Tim memilih nama Tirai, React, Express, SQLite, JavaScript biasa |
 | 2026-11-25 | Langkah 0 | Kerangka proyek: konfigurasi Vite dan Express, halaman awal, tes kesehatan server, README, dokumen arsitektur awal | (diisi tim setelah memeriksa) |
+| 2026-11-25 | Langkah 1 | Skema SQLite, inventaris alasan tiap kolom, data sintetis (nama, alamat, kondisi dikarang), hash kata sandi scrypt, tes skema dan minimisasi, dokumen database | (diisi tim setelah memeriksa) |
 
 Catatan: AI tidak dipakai sebagai sumber teks ayat, hadis, atau pasal undang-undang. Semua rujukan semacam itu diperiksa manusia ke sumber asli.
