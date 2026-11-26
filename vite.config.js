@@ -11,7 +11,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    proxy: { '/api': 'http://localhost:3000' },
+    // changeOrigin: false agar header Host tetap localhost:5173. Bentuk singkat
+    // (string) di Vite memakai changeOrigin: true, sehingga Host berubah menjadi
+    // localhost:3000 dan penahan CSRF asalSama() menolak login di mode dev.
+    proxy: { '/api': { target: 'http://localhost:3000', changeOrigin: false } },
   },
   test: {
     root: import.meta.dirname,
